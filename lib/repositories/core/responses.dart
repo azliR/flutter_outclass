@@ -5,11 +5,18 @@ class HttpResponse {
     this.data,
   });
 
-  factory HttpResponse.fromMap(Map<String, dynamic> map) => HttpResponse(
-        success: map['success'] as bool,
-        message: map['message'] as String?,
-        data: map['data'] as Map<String, dynamic>?,
+  factory HttpResponse.fromMap(Map<String, dynamic>? json) {
+    if (json == null) {
+      return const HttpResponse(
+        success: false,
       );
+    }
+    return HttpResponse(
+      success: json['success'] as bool,
+      message: json['message'] as String?,
+      data: json['data'] as Map<String, dynamic>?,
+    );
+  }
 
   final bool success;
   final String? message;
