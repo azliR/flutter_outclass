@@ -4,6 +4,7 @@ import 'package:injectable/injectable.dart';
 import 'package:outclass/blocs/auth/auth_cubit.dart';
 import 'package:outclass/dtos/token_dto.dart';
 import 'package:outclass/injectable.dart';
+import 'package:outclass/repositories/core/cache_manager.dart';
 
 @module
 abstract class ClientInjectableModule {
@@ -42,6 +43,11 @@ abstract class ClientInjectableModule {
   @lazySingleton
   Dio get dio {
     return Dio(options)..interceptors.add(fresh);
+  }
+
+  @lazySingleton
+  CacheManager get cacheManager {
+    return CacheManager(dio);
   }
 }
 

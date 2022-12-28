@@ -33,8 +33,8 @@ class FolderItem extends StatelessWidget {
       AddFolderDialogRoute(
         onFolderCreated: (folder) {
           InheritedPagingController.of(context)
-              .folderPagingController
-              .refresh();
+              .folderPagingControllers[shareType]
+              ?.refresh();
         },
         shareType: shareType.toString(),
         existingFolder: folder,

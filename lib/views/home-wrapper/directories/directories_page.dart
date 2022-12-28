@@ -38,8 +38,9 @@ class DirectoriesPage extends StatefulWidget implements AutoRouteWrapper {
 class _DirectoriesPageState extends State<DirectoriesPage> {
   static const _pageLimit = 20;
 
-  late final PagingController<int, Folder> _folderPagingController;
-  late final PagingController<int, Post> _postPagingController;
+  final _folderPagingController =
+      PagingController<int, Folder>(firstPageKey: 1);
+  final _postPagingController = PagingController<int, Post>(firstPageKey: 1);
 
   Future<void> _fetchFolders(int page) async {
     final authCubit = context.read<AuthCubit>();
@@ -83,14 +84,23 @@ class _DirectoriesPageState extends State<DirectoriesPage> {
 
   @override
   void didChangeDependencies() {
-    _folderPagingController =
-        InheritedPagingController.of(context).folderPagingController;
-    _postPagingController =
-        InheritedPagingController.of(context).postPagingController;
+    final shareType = ShareType.fromString(widget.shareType);
+
+    InheritedPagingController.of(context).folderPagingControllers[shareType] =
+        _folderPagingController;
+    InheritedPagingController.of(context).postPagingControllers[shareType] =
+        _postPagingController;
 
     _folderPagingController.addPageRequestListener(_fetchFolders);
     _postPagingController.addPageRequestListener(_fetchPosts);
     super.didChangeDependencies();
+  }
+
+  @override
+  void dispose() {
+    _folderPagingController.dispose();
+    _postPagingController.dispose();
+    super.dispose();
   }
 
   @override
@@ -146,7 +156,8 @@ class _DirectoriesPageState extends State<DirectoriesPage> {
                               foregroundColor: colorScheme.onSecondaryContainer,
                               backgroundColor: colorScheme.secondaryContainer,
                             ).copyWith(
-                                elevation: ButtonStyleButton.allOrNull(0)),
+                              elevation: ButtonStyleButton.allOrNull(0),
+                            ),
                             onPressed: () => context.router.pop(),
                             label: const Text('Kembali'),
                             icon: const Icon(Icons.arrow_back_rounded),

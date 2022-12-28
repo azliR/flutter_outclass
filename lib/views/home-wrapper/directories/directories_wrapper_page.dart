@@ -10,9 +10,15 @@ import 'package:outclass/views/core/app_router.dart';
 class DirectoriesWrapperPage extends StatelessWidget {
   DirectoriesWrapperPage({super.key});
 
-  final _folderPagingController =
-      PagingController<int, Folder>(firstPageKey: 1);
-  final _postPagingController = PagingController<int, Post>(firstPageKey: 1);
+  final _folderPagingControllers = {
+    for (var shareType in ShareType.values)
+      shareType: PagingController<int, Folder>(firstPageKey: 1)
+  };
+
+  final _postPagingControllers = {
+    for (var shareType in ShareType.values)
+      shareType: PagingController<int, Post>(firstPageKey: 1)
+  };
 
   void _openAddFolderDialog({
     required BuildContext context,
@@ -21,7 +27,21 @@ class DirectoriesWrapperPage extends StatelessWidget {
     context.router.push(
       AddFolderDialogRoute(
         onFolderCreated: (folder) {
-          _folderPagingController.refresh();
+          _folderPagingControllers[shareType]?.refresh();
+        },
+        shareType: shareType.toString(),
+      ),
+    );
+  }
+
+  void _openAddPostDialog({
+    required BuildContext context,
+    required ShareType shareType,
+  }) {
+    context.router.push(
+      AddPostDialogRoute(
+        onPostCreated: (post) {
+          _postPagingControllers[shareType]?.refresh();
         },
         shareType: shareType.toString(),
       ),
@@ -31,8 +51,8 @@ class DirectoriesWrapperPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InheritedPagingController(
-      folderPagingController: _folderPagingController,
-      postPagingController: _postPagingController,
+      folderPagingControllers: _folderPagingControllers,
+      postPagingControllers: _postPagingControllers,
       child: DefaultTabController(
         length: ShareType.values.length,
         child: AutoTabsRouter.tabBar(
@@ -88,7 +108,10 @@ class DirectoriesWrapperPage extends StatelessWidget {
                 children: [
                   SpeedDialChild(
                     label: 'Buat postingan',
-                    onTap: () {},
+                    onTap: () => _openAddPostDialog(
+                      context: context,
+                      shareType: ShareType.values[tabController.index],
+                    ),
                     shape: const RoundedRectangleBorder(
                       borderRadius: BorderRadius.all(Radius.circular(16)),
                     ),
@@ -96,12 +119,10 @@ class DirectoriesWrapperPage extends StatelessWidget {
                   ),
                   SpeedDialChild(
                     label: 'Buat folder',
-                    onTap: () {
-                      _openAddFolderDialog(
-                        context: context,
-                        shareType: ShareType.values[tabController.index],
-                      );
-                    },
+                    onTap: () => _openAddFolderDialog(
+                      context: context,
+                      shareType: ShareType.values[tabController.index],
+                    ),
                     shape: const RoundedRectangleBorder(
                       borderRadius: BorderRadius.all(Radius.circular(16)),
                     ),
@@ -118,16 +139,15 @@ class DirectoriesWrapperPage extends StatelessWidget {
 }
 
 class InheritedPagingController extends InheritedWidget {
-  // ignore: lines_longer_than_80_chars
   const InheritedPagingController({
     super.key,
-    required this.folderPagingController,
-    required this.postPagingController,
+    required this.folderPagingControllers,
+    required this.postPagingControllers,
     required super.child,
   });
 
-  final PagingController<int, Folder> folderPagingController;
-  final PagingController<int, Post> postPagingController;
+  final Map<ShareType, PagingController<int, Folder>> folderPagingControllers;
+  final Map<ShareType, PagingController<int, Post>> postPagingControllers;
 
   static InheritedPagingController? maybeOf(BuildContext context) {
     return context

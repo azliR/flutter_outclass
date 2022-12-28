@@ -43,7 +43,7 @@ class _$AppRouter extends RootStackRouter {
     CalendarRoute.name: (routeData) {
       return AdaptivePage<dynamic>(
         routeData: routeData,
-        child: const CalendarPage(),
+        child: WrappedRoute(child: const CalendarPage()),
       );
     },
     DirectoriesTabWrapperRoute.name: (routeData) {

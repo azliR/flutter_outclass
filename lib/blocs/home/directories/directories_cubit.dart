@@ -1,7 +1,9 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:injectable/injectable.dart';
+import 'package:open_app_file/open_app_file.dart';
 import 'package:outclass/dtos/directory_dto.dart';
+import 'package:outclass/models/directory/file.dart';
 import 'package:outclass/models/directory/folder.dart';
 import 'package:outclass/models/directory/post.dart';
 import 'package:outclass/repositories/directory_repository.dart';
@@ -29,6 +31,13 @@ class DirectoriesCubit extends Cubit<DirectoriesState> {
       return [];
     }
     return response.data!;
+  }
+
+  Future<void> openFile(PostFile postFile) async {
+    final file = await _directoryRepository.getFile(postFile.link);
+    if (file != null) {
+      await OpenAppFile.open(file.path);
+    }
   }
 
   Future<void> deleteFolder(String folderId) async {

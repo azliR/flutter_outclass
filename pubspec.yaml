@@ -11,10 +11,13 @@ dependencies:
   animations: ^2.0.7
   auto_route: ^5.0.4
   bloc: ^8.1.0
+  cross_file: ^0.3.3+2
+  desktop_drop: ^0.4.0
   dio: ^4.0.6
   dio_cache_interceptor: ^3.3.1
   dynamic_color: ^1.5.4
   equatable: ^2.0.5
+  file_picker: ^5.2.4
   flutter:
     sdk: flutter
   flutter_adaptive_scaffold: ^0.0.8
@@ -31,6 +34,7 @@ dependencies:
   injectable: ^2.1.0
   intl: ^0.17.0
   material_design_icons_flutter: ^6.0.7096
+  open_app_file: ^4.0.1
   path_provider: ^2.0.11
   pretty_qr_code: ^2.0.3
   syncfusion_flutter_calendar: ^20.3.59

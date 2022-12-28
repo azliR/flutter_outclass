@@ -1,4 +1,6 @@
 import 'package:auto_route/auto_route.dart';
+import 'package:cross_file/cross_file.dart';
+import 'package:desktop_drop/desktop_drop.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:outclass/blocs/auth/auth_cubit.dart';
@@ -8,7 +10,7 @@ import 'package:outclass/injectable.dart';
 import 'package:outclass/models/directory/post.dart';
 import 'package:outclass/views/auth/sign_in/widgets/progress_overlay.dart';
 
-class AddPostDialog extends StatelessWidget implements AutoRouteWrapper {
+class AddPostDialog extends StatefulWidget implements AutoRouteWrapper {
   const AddPostDialog({
     super.key,
     required this.shareType,
@@ -21,6 +23,9 @@ class AddPostDialog extends StatelessWidget implements AutoRouteWrapper {
   final String? parentId;
   final Post? existingPost;
   final void Function(Post post) onPostCreated;
+
+  @override
+  State<AddPostDialog> createState() => _AddPostDialogState();
 
   @override
   Widget wrappedRoute(BuildContext context) {
@@ -51,6 +56,10 @@ class AddPostDialog extends StatelessWidget implements AutoRouteWrapper {
       ),
     );
   }
+}
+
+class _AddPostDialogState extends State<AddPostDialog> {
+  var _isDragging = false;
 
   @override
   Widget build(BuildContext context) {
@@ -60,12 +69,12 @@ class AddPostDialog extends StatelessWidget implements AutoRouteWrapper {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(existingPost == null ? 'Buat post' : 'Edit post'),
+        title: Text(widget.existingPost == null ? 'Buat post' : 'Edit post'),
         actions: [
           ElevatedButton(
             onPressed: () => cubit.onSavePressed(
-              isUpdating: existingPost != null,
-              onPostCreated: onPostCreated,
+              isUpdating: widget.existingPost != null,
+              onPostCreated: widget.onPostCreated,
             ),
             style: ElevatedButton.styleFrom(
               foregroundColor: colorScheme.onPrimary,
@@ -86,20 +95,20 @@ class AddPostDialog extends StatelessWidget implements AutoRouteWrapper {
                 child: ListView(
                   children: [
                     TextFormField(
-                      initialValue: existingPost?.name,
+                      initialValue: widget.existingPost?.name,
                       onChanged: cubit.onPostNameChanged,
                       decoration: const InputDecoration(
                         icon: Icon(Icons.title),
-                        label: Text('Nama post'),
+                        label: Text('Judul postingan'),
                       ),
                     ),
                     const SizedBox(height: 16),
                     TextFormField(
-                      initialValue: existingPost?.description,
+                      initialValue: widget.existingPost?.description,
                       minLines: 2,
                       maxLines: 5,
                       onChanged: cubit.onPostDescriptionChanged,
-                      decoration: InputDecoration(
+                      decoration: const InputDecoration(
                         icon: Icon(Icons.notes),
                         label: Text('Deskripsi'),
                       ),
@@ -108,10 +117,85 @@ class AddPostDialog extends StatelessWidget implements AutoRouteWrapper {
                     Padding(
                       padding: const EdgeInsets.all(8),
                       child: Text(
-                        'Pilih warna',
+                        'Pilih berkas',
                         style: textTheme.titleMedium,
                       ),
                     ),
+                    BlocSelector<AddPostCubit, AddPostState, List<XFile>>(
+                      selector: (state) => state.addPostDto.files,
+                      builder: (context, files) {
+                        return DropTarget(
+                          onDragDone: (detail) {
+                            cubit.onPostFilesChanged(
+                              [...files, ...detail.files],
+                            );
+                          },
+                          onDragEntered: (detail) {
+                            setState(() {
+                              _isDragging = true;
+                            });
+                          },
+                          onDragExited: (detail) {
+                            setState(() {
+                              _isDragging = false;
+                            });
+                          },
+                          child: Container(
+                            constraints: const BoxConstraints(
+                              minHeight: 180,
+                            ),
+                            padding: const EdgeInsets.all(8),
+                            decoration: BoxDecoration(
+                              color: colorScheme.surfaceVariant,
+                              border: Border.all(
+                                color: _isDragging
+                                    ? colorScheme.primary
+                                    : colorScheme.onSurface,
+                                width: _isDragging ? 2 : 1,
+                              ),
+                              borderRadius:
+                                  const BorderRadius.all(Radius.circular(16)),
+                            ),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                if (files.isEmpty)
+                                  Center(
+                                    child: Text(
+                                      _isDragging
+                                          ? 'Lepasin buat nambahin berkasnya'
+                                          : 'Lempar sini berkasnya, atau',
+                                    ),
+                                  )
+                                else
+                                  Wrap(
+                                    children: [
+                                      for (final file in files)
+                                        Padding(
+                                          padding: const EdgeInsets.all(8),
+                                          child: Chip(
+                                            label: Text(file.name),
+                                            onDeleted: () {
+                                              cubit.onPostFilesChanged(
+                                                [...files]..remove(file),
+                                              );
+                                            },
+                                          ),
+                                        ),
+                                    ],
+                                  ),
+                                const SizedBox(height: 8),
+                                if (!_isDragging)
+                                  ElevatedButton(
+                                    onPressed: cubit.onSelectFiles,
+                                    child: Text('Pilih berkas'),
+                                  ),
+                              ],
+                            ),
+                          ),
+                        );
+                      },
+                    )
                   ],
                 ),
               ),

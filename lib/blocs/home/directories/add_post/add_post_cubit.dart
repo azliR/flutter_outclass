@@ -1,7 +1,7 @@
-import 'dart:io';
-
 import 'package:bloc/bloc.dart';
+import 'package:cross_file/cross_file.dart';
 import 'package:equatable/equatable.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:injectable/injectable.dart';
 import 'package:outclass/dtos/directory_dto.dart';
 import 'package:outclass/dtos/post_dto.dart';
@@ -55,12 +55,37 @@ class AddPostCubit extends Cubit<AddPostState> {
     );
   }
 
-  void onPostFilesChanged(List<File> postFiles) {
+  void onPostFilesChanged(List<XFile> postFiles) {
     emit(
       state.copyWith(
-        addPostDto: state.addPostDto.copyWith(files: postFiles),
+        addPostDto: state.addPostDto.copyWith(
+          // remove the same path
+          files: postFiles.fold<List<XFile>>([], (newFiles, file) {
+            return newFiles
+                        .indexWhere((newFile) => newFile.path == file.path) ==
+                    -1
+                ? [...newFiles, file]
+                : newFiles;
+          }),
+        ),
       ),
     );
+  }
+
+  Future<void> onSelectFiles() async {
+    final result = await FilePicker.platform.pickFiles(allowMultiple: true);
+
+    if (result != null) {
+      final files = result.files
+          .map(
+            (file) => XFile(
+              file.path!,
+              name: file.name,
+            ),
+          )
+          .toList();
+      onPostFilesChanged([...state.addPostDto.files, ...files]);
+    }
   }
 
   Future<void> onSavePressed({

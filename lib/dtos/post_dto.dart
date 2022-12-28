@@ -1,5 +1,5 @@
-import 'dart:io';
-
+import 'package:cross_file/cross_file.dart';
+import 'package:dio/dio.dart';
 import 'package:equatable/equatable.dart';
 import 'package:outclass/models/directory/post.dart';
 
@@ -23,7 +23,7 @@ class AddPostDto extends Equatable {
   final String? classroomId;
   final String name;
   final String? description;
-  final List<File> files;
+  final List<XFile> files;
 
   factory AddPostDto.fromModel(Post post) => AddPostDto(
         id: post.id,
@@ -34,13 +34,22 @@ class AddPostDto extends Equatable {
         files: [],
       );
 
-  Map<String, dynamic> toJson() => {
+  Future<Map<String, dynamic>> toJson() async => {
         'id': id,
         'parent_id': parentId,
         'classroom_id': classroomId,
         'name': name,
         'description': description,
-        'files': files,
+        'files': await Future.wait(
+          files
+              .map(
+                (file) => MultipartFile.fromFile(
+                  file.path,
+                  filename: file.name,
+                ),
+              )
+              .toList(),
+        ),
       };
 
   AddPostDto copyWith({
@@ -49,7 +58,7 @@ class AddPostDto extends Equatable {
     String? classroomId,
     String? name,
     String? description,
-    List<File>? files,
+    List<XFile>? files,
   }) {
     return AddPostDto(
       id: id ?? this.id,

@@ -32,7 +32,9 @@ class PostItem extends StatelessWidget {
     context.router.push(
       AddPostDialogRoute(
         onPostCreated: (post) {
-          InheritedPagingController.of(context).postPagingController.refresh();
+          InheritedPagingController.of(context)
+              .postPagingControllers[shareType]
+              ?.refresh();
         },
         shareType: shareType.toString(),
         existingPost: post,
@@ -77,6 +79,7 @@ class PostItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final cubit = context.read<DirectoriesCubit>();
     final textTheme = Theme.of(context).textTheme;
     final colorScheme = Theme.of(context).colorScheme;
 
@@ -138,14 +141,19 @@ class PostItem extends StatelessWidget {
                     child: ListTile(
                       title: Text(file.name),
                       subtitle: Text(file.size.toString()),
-                      leading: CircleAvatar(child: Icon(Icons.picture_as_pdf)),
-                      trailing: Icon(Icons.download, size: 20),
+                      leading: CircleAvatar(
+                        child: Icon(
+                          _getFileIcon(file.type),
+                          color: _getFileColor(file.type),
+                        ),
+                      ),
                       tileColor: colorScheme.surfaceVariant,
                       minVerticalPadding: 0,
                       dense: true,
                       shape: const RoundedRectangleBorder(
                         borderRadius: BorderRadius.all(Radius.circular(8)),
                       ),
+                      onTap: () => cubit.openFile(file),
                     ),
                   );
                 }).toList(),
@@ -154,5 +162,51 @@ class PostItem extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  IconData _getFileIcon(String type) {
+    if (type == 'pdf') {
+      return Icons.picture_as_pdf_outlined;
+    } else if (type == 'doc' || type == 'docx') {
+      return Icons.description_outlined;
+    } else if (type == 'xls' || type == 'xlsx') {
+      return Icons.table_chart_outlined;
+    } else if (type == 'ppt' || type == 'pptx') {
+      return Icons.slideshow_outlined;
+    } else if (type == 'zip' || type == 'rar') {
+      return Icons.folder_zip_outlined;
+    } else if (type == 'txt') {
+      return Icons.article_outlined;
+    } else if (type == 'mp4' || type == 'avi' || type == 'mkv') {
+      return Icons.video_file_outlined;
+    } else if (type == 'mp3' || type == 'wav') {
+      return Icons.audio_file_outlined;
+    } else if (type == 'jpg' || type == 'png' || type == 'jpeg') {
+      return Icons.image_outlined;
+    }
+    return Icons.notes_outlined;
+  }
+
+  Color _getFileColor(String type) {
+    if (type == 'pdf') {
+      return Colors.red;
+    } else if (type == 'doc' || type == 'docx') {
+      return Colors.blue;
+    } else if (type == 'xls' || type == 'xlsx') {
+      return Colors.green.shade600;
+    } else if (type == 'ppt' || type == 'pptx') {
+      return Colors.orange;
+    } else if (type == 'zip' || type == 'rar') {
+      return Colors.green;
+    } else if (type == 'txt') {
+      return Colors.grey.shade600;
+    } else if (type == 'mp4' || type == 'avi' || type == 'mkv') {
+      return Colors.red.shade700;
+    } else if (type == 'mp3' || type == 'wav') {
+      return Colors.blueGrey;
+    } else if (type == 'jpg' || type == 'png' || type == 'jpeg') {
+      return Colors.deepPurple;
+    }
+    return Colors.grey;
   }
 }
