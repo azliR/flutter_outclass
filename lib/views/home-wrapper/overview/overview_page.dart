@@ -12,7 +12,7 @@ class OverviewPage extends StatelessWidget {
       body: CustomScrollView(
         slivers: [
           SliverAppBar.large(
-            title: Text('Beranda'),
+            title: const Text('Beranda'),
           ),
           SliverToBoxAdapter(
             child: Card(

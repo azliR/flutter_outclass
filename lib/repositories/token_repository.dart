@@ -13,16 +13,19 @@ class TokenRepository {
   final Dio _client;
   final Fresh<OAuth2Token> _fresh;
 
-  Future<HttpResponse> renewToken({
+  Future<HttpResponse<Token>> renewToken({
     required RenewTokenDto renewTokenDto,
   }) async {
     try {
       final response = await _client.post<Map<String, dynamic>>(
-        '/auth/refresh',
+        '/user/refresh',
         data: renewTokenDto.toJson(),
       );
 
-      return HttpResponse.fromMap(response.data);
+      return HttpResponse.fromJson(
+        response.data,
+        (data) => Token.fromJson(data as Map<String, dynamic>),
+      );
     } catch (e, stackTrace) {
       log(e.toString(), stackTrace: stackTrace);
       return HttpResponse(
@@ -44,7 +47,7 @@ class TokenRepository {
     );
   }
 
-  void setToken(Token token) {
-    _fresh.setToken(parseToken(token));
+  Future<void> setToken(Token token) async {
+    await _fresh.setToken(parseToken(token));
   }
 }

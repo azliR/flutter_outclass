@@ -1,22 +1,33 @@
 import 'package:auto_route/auto_route.dart';
-import 'package:fresh_dio/fresh_dio.dart';
+import 'package:outclass/blocs/auth/auth_cubit.dart';
 import 'package:outclass/injectable.dart';
 import 'package:outclass/views/core/app_router.dart';
 
 class AuthGuard extends AutoRouteGuard {
   @override
-  Future<void> onNavigation(
+  void onNavigation(
     NavigationResolver resolver,
     StackRouter router,
-  ) async {
-    final user = await getIt<Fresh<OAuth2Token>>().token;
+  ) {
+    final authCubit = getIt<AuthCubit>()..initialSetup();
+    final user = authCubit.state.token;
+
     if (user == null) {
-      await router.pushAndPopUntil(
+      router.pushAndPopUntil(
         const SignInRoute(),
         predicate: (_) => false,
       );
-    } else {
-      resolver.next();
+      return;
     }
+
+    final classroom = getIt<AuthCubit>().state.classroom;
+    if (classroom == null) {
+      router.pushAndPopUntil(
+        const SignInRoute(),
+        predicate: (_) => false,
+      );
+      return;
+    }
+    resolver.next();
   }
 }

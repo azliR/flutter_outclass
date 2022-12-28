@@ -5,9 +5,11 @@ import 'package:outclass/views/auth/sign_in/sign_in_page.dart';
 import 'package:outclass/views/core/app_route_guards.dart';
 import 'package:outclass/views/home-wrapper/account/account_page.dart';
 import 'package:outclass/views/home-wrapper/calendar/calendar_page.dart';
+import 'package:outclass/views/home-wrapper/directories/add_folder_dialog.dart';
+import 'package:outclass/views/home-wrapper/directories/directories_page.dart';
+import 'package:outclass/views/home-wrapper/directories/directories_wrapper_page.dart';
 import 'package:outclass/views/home-wrapper/home_wrapper_page.dart';
 import 'package:outclass/views/home-wrapper/overview/overview_page.dart';
-import 'package:outclass/views/home-wrapper/posts/posts_page.dart';
 import 'package:outclass/views/home-wrapper/settings/settings_page.dart';
 
 part 'app_router.gr.dart';
@@ -16,7 +18,7 @@ part 'app_router.gr.dart';
   replaceInRouteName: 'Page,Route',
   routes: [
     AutoRoute(
-      path: 'in',
+      path: '/in',
       page: SignInPage,
     ),
     AutoRoute(
@@ -34,13 +36,33 @@ part 'app_router.gr.dart';
           page: CalendarPage,
         ),
         AutoRoute(
-          path: 'posts',
+          path: 'folders',
           page: EmptyRouterPage,
-          name: 'PostsWrapperRoute',
+          name: 'DirectoriesTabWrapperRoute',
           children: [
             AutoRoute(
               path: '',
-              page: PostsPage,
+              page: DirectoriesWrapperPage,
+              children: [
+                AutoRoute(
+                  path: '',
+                  page: EmptyRouterPage,
+                  name: 'DirectoriesShareTypeWrapperRoute',
+                  children: [
+                    RedirectRoute(path: '', redirectTo: 'class/null'),
+                    AutoRoute(
+                      path: ':shareType/:parentId',
+                      page: DirectoriesPage,
+                    ),
+                  ],
+                ),
+              ],
+            ),
+            AutoRoute(
+              path: 'folder/add',
+              fullscreenDialog: true,
+              page: AddFolderDialog,
+              name: 'AddFolderDialogRoute',
             ),
           ],
         ),

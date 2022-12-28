@@ -1,11 +1,14 @@
-class HttpResponse {
+class HttpResponse<T> {
   const HttpResponse({
     required this.success,
     this.message,
     this.data,
   });
 
-  factory HttpResponse.fromMap(Map<String, dynamic>? json) {
+  factory HttpResponse.fromJson(
+    Map<String, dynamic>? json,
+    T Function(dynamic data)? fromJson,
+  ) {
     if (json == null) {
       return const HttpResponse(
         success: false,
@@ -14,13 +17,13 @@ class HttpResponse {
     return HttpResponse(
       success: json['success'] as bool,
       message: json['message'] as String?,
-      data: json['data'] as Map<String, dynamic>?,
+      data: json['data'] != null ? fromJson!(json['data']) : null,
     );
   }
 
   final bool success;
   final String? message;
-  final Map<String, dynamic>? data;
+  final T? data;
 
   Map<String, dynamic> toJson() => {
         'success': success,

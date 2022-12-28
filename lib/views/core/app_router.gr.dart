@@ -46,7 +46,7 @@ class _$AppRouter extends RootStackRouter {
         child: const CalendarPage(),
       );
     },
-    PostsWrapperRoute.name: (routeData) {
+    DirectoriesTabWrapperRoute.name: (routeData) {
       return AdaptivePage<dynamic>(
         routeData: routeData,
         child: const EmptyRouterPage(),
@@ -58,16 +58,46 @@ class _$AppRouter extends RootStackRouter {
         child: const EmptyRouterPage(),
       );
     },
-    PostsRoute.name: (routeData) {
+    DirectoriesWrapperRoute.name: (routeData) {
       return AdaptivePage<dynamic>(
         routeData: routeData,
-        child: const PostsPage(),
+        child: const DirectoriesWrapperPage(),
+      );
+    },
+    AddFolderDialogRoute.name: (routeData) {
+      return AdaptivePage<dynamic>(
+        routeData: routeData,
+        child: const AddFolderDialog(),
+        fullscreenDialog: true,
+      );
+    },
+    DirectoriesShareTypeWrapperRoute.name: (routeData) {
+      return AdaptivePage<dynamic>(
+        routeData: routeData,
+        child: const EmptyRouterPage(),
+      );
+    },
+    DirectoriesRoute.name: (routeData) {
+      final pathParams = routeData.inheritedPathParams;
+      final args = routeData.argsAs<DirectoriesRouteArgs>(
+          orElse: () => DirectoriesRouteArgs(
+                shareType: pathParams.getString('shareType'),
+                parentId: pathParams.getString('parentId'),
+              ));
+      return AdaptivePage<dynamic>(
+        routeData: routeData,
+        child: WrappedRoute(
+            child: DirectoriesPage(
+          key: args.key,
+          shareType: args.shareType,
+          parentId: args.parentId,
+        )),
       );
     },
     AccountRoute.name: (routeData) {
       return AdaptivePage<dynamic>(
         routeData: routeData,
-        child: const AccountPage(),
+        child: WrappedRoute(child: const AccountPage()),
       );
     },
     SettingsRoute.name: (routeData) {
@@ -82,7 +112,7 @@ class _$AppRouter extends RootStackRouter {
   List<RouteConfig> get routes => [
         RouteConfig(
           SignInRoute.name,
-          path: 'in',
+          path: '/in',
         ),
         RouteConfig(
           HomeWrapperRoute.name,
@@ -100,15 +130,41 @@ class _$AppRouter extends RootStackRouter {
               parent: HomeWrapperRoute.name,
             ),
             RouteConfig(
-              PostsWrapperRoute.name,
-              path: 'posts',
+              DirectoriesTabWrapperRoute.name,
+              path: 'folders',
               parent: HomeWrapperRoute.name,
               children: [
                 RouteConfig(
-                  PostsRoute.name,
+                  DirectoriesWrapperRoute.name,
                   path: '',
-                  parent: PostsWrapperRoute.name,
-                )
+                  parent: DirectoriesTabWrapperRoute.name,
+                  children: [
+                    RouteConfig(
+                      DirectoriesShareTypeWrapperRoute.name,
+                      path: '',
+                      parent: DirectoriesWrapperRoute.name,
+                      children: [
+                        RouteConfig(
+                          '#redirect',
+                          path: '',
+                          parent: DirectoriesShareTypeWrapperRoute.name,
+                          redirectTo: 'class/null',
+                          fullMatch: true,
+                        ),
+                        RouteConfig(
+                          DirectoriesRoute.name,
+                          path: ':shareType/:parentId',
+                          parent: DirectoriesShareTypeWrapperRoute.name,
+                        ),
+                      ],
+                    )
+                  ],
+                ),
+                RouteConfig(
+                  AddFolderDialogRoute.name,
+                  path: 'folder/add',
+                  parent: DirectoriesTabWrapperRoute.name,
+                ),
               ],
             ),
             RouteConfig(
@@ -139,7 +195,7 @@ class SignInRoute extends PageRouteInfo<void> {
   const SignInRoute()
       : super(
           SignInRoute.name,
-          path: 'in',
+          path: '/in',
         );
 
   static const String name = 'SignInRoute';
@@ -184,15 +240,15 @@ class CalendarRoute extends PageRouteInfo<void> {
 
 /// generated route for
 /// [EmptyRouterPage]
-class PostsWrapperRoute extends PageRouteInfo<void> {
-  const PostsWrapperRoute({List<PageRouteInfo>? children})
+class DirectoriesTabWrapperRoute extends PageRouteInfo<void> {
+  const DirectoriesTabWrapperRoute({List<PageRouteInfo>? children})
       : super(
-          PostsWrapperRoute.name,
-          path: 'posts',
+          DirectoriesTabWrapperRoute.name,
+          path: 'folders',
           initialChildren: children,
         );
 
-  static const String name = 'PostsWrapperRoute';
+  static const String name = 'DirectoriesTabWrapperRoute';
 }
 
 /// generated route for
@@ -209,15 +265,84 @@ class AccountWrapperRoute extends PageRouteInfo<void> {
 }
 
 /// generated route for
-/// [PostsPage]
-class PostsRoute extends PageRouteInfo<void> {
-  const PostsRoute()
+/// [DirectoriesWrapperPage]
+class DirectoriesWrapperRoute extends PageRouteInfo<void> {
+  const DirectoriesWrapperRoute({List<PageRouteInfo>? children})
       : super(
-          PostsRoute.name,
+          DirectoriesWrapperRoute.name,
           path: '',
+          initialChildren: children,
         );
 
-  static const String name = 'PostsRoute';
+  static const String name = 'DirectoriesWrapperRoute';
+}
+
+/// generated route for
+/// [AddFolderDialog]
+class AddFolderDialogRoute extends PageRouteInfo<void> {
+  const AddFolderDialogRoute()
+      : super(
+          AddFolderDialogRoute.name,
+          path: 'folder/add',
+        );
+
+  static const String name = 'AddFolderDialogRoute';
+}
+
+/// generated route for
+/// [EmptyRouterPage]
+class DirectoriesShareTypeWrapperRoute extends PageRouteInfo<void> {
+  const DirectoriesShareTypeWrapperRoute({List<PageRouteInfo>? children})
+      : super(
+          DirectoriesShareTypeWrapperRoute.name,
+          path: '',
+          initialChildren: children,
+        );
+
+  static const String name = 'DirectoriesShareTypeWrapperRoute';
+}
+
+/// generated route for
+/// [DirectoriesPage]
+class DirectoriesRoute extends PageRouteInfo<DirectoriesRouteArgs> {
+  DirectoriesRoute({
+    Key? key,
+    required String shareType,
+    required String parentId,
+  }) : super(
+          DirectoriesRoute.name,
+          path: ':shareType/:parentId',
+          args: DirectoriesRouteArgs(
+            key: key,
+            shareType: shareType,
+            parentId: parentId,
+          ),
+          rawPathParams: {
+            'shareType': shareType,
+            'parentId': parentId,
+          },
+        );
+
+  static const String name = 'DirectoriesRoute';
+}
+
+class DirectoriesRouteArgs {
+  const DirectoriesRouteArgs({
+    this.key,
+    required this.shareType,
+    required this.parentId,
+  });
+
+  final Key? key;
+
+  final String shareType;
+
+  final String parentId;
+
+  @override
+  String toString() {
+    return 'DirectoriesRouteArgs{key: $key, shareType: $shareType, parentId: $parentId}';
+  }
 }
 
 /// generated route for

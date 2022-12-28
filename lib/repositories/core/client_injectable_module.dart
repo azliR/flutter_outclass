@@ -1,40 +1,43 @@
 import 'package:dio/dio.dart';
 import 'package:fresh_dio/fresh_dio.dart';
 import 'package:injectable/injectable.dart';
+import 'package:outclass/blocs/auth/auth_cubit.dart';
 import 'package:outclass/dtos/token_dto.dart';
 import 'package:outclass/injectable.dart';
-import 'package:outclass/models/auth/token.dart';
-import 'package:outclass/repositories/token_repository.dart';
 
 @module
 abstract class ClientInjectableModule {
   final options = BaseOptions(
-    baseUrl: 'https://outclass.api.azlir.my.id/api/v1',
+    // baseUrl: 'https://outclass.api.azlir.my.id/api/v1',
+    baseUrl: 'https://localhost:20109/api/v1',
   );
 
   @lazySingleton
-  Fresh<OAuth2Token> get fresh {
-    return Fresh.oAuth2(
-      tokenStorage: InMemoryTokenStorage(),
-      refreshToken: (token, httpClient) async {
-        final refreshToken = token?.refreshToken;
-        if (refreshToken != null) {
-          final tokenRepository = getIt<TokenRepository>();
-          final response = await tokenRepository.renewToken(
-            renewTokenDto: RenewTokenDto(refreshToken: refreshToken),
-          );
-          if (response.success) {
-            final token = Token.fromMap(response.data!);
-            return tokenRepository.parseToken(token);
-          }
-        }
+  final fresh = Fresh.oAuth2(
+    tokenStorage: InMemoryTokenStorage(),
+    refreshToken: (token, httpClient) async {
+      final refreshToken = token?.refreshToken;
+      if (refreshToken == null) {
         throw DioError(
-          requestOptions: RequestOptions(path: '/auth/refresh'),
+          requestOptions: RequestOptions(path: '/user/refresh'),
           error: 'Refresh token is null',
         );
-      },
-    );
-  }
+      }
+
+      final authCubit = getIt<AuthCubit>();
+      final newToken = await authCubit.renewToken(
+        renewTokenDto: RenewTokenDto(refreshToken: refreshToken),
+      );
+
+      if (newToken == null) {
+        throw DioError(
+          requestOptions: RequestOptions(path: '/user/refresh'),
+          error: 'Failed to refresh token',
+        );
+      }
+      return newToken;
+    },
+  );
 
   @lazySingleton
   Dio get dio {

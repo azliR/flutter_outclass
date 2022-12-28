@@ -2,6 +2,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
+import 'package:outclass/blocs/auth/auth_cubit.dart';
 import 'package:outclass/blocs/auth/sign_in/sign_in_cubit.dart';
 import 'package:outclass/injectable.dart';
 import 'package:outclass/views/auth/sign_in/widgets/progress_overlay.dart';
@@ -14,12 +15,24 @@ class SignInPage extends StatefulWidget implements AutoRouteWrapper {
   Widget wrappedRoute(BuildContext context) {
     return BlocProvider(
       create: (context) => getIt<SignInCubit>(),
-      child: BlocListener<SignInCubit, SignInState>(
+      child: BlocListener<AuthCubit, AuthState>(
         listener: (context, state) {
-          if (state.status == SignInStatus.submissionSuccess) {
+          if (state.status == AuthStatus.submissionSuccess) {
             context.router.pushAndPopUntil(
               const HomeWrapperRoute(),
               predicate: (_) => false,
+            );
+          } else if (state.status ==
+              AuthStatus.submissionSuccessWithNoClassroom) {
+            context.router.pushAndPopUntil(
+              const HomeWrapperRoute(),
+              predicate: (_) => false,
+            );
+          } else if (state.status == AuthStatus.submissionFailure) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                content: Text('Gagal masuk'),
+              ),
             );
           }
         },
@@ -37,7 +50,9 @@ class _SignInPageState extends State<SignInPage> {
 
   void _onSignInWithEmailAndPasswordPressed() {
     if (_form.currentState?.validate() ?? false) {
-      context.read<SignInCubit>().onSignInPressed();
+      context.read<AuthCubit>().signInWithEmailAndPassword(
+            context.read<SignInCubit>().state.signInDto,
+          );
     }
   }
 
@@ -48,18 +63,18 @@ class _SignInPageState extends State<SignInPage> {
 
     return Scaffold(
       backgroundColor: colorScheme.primaryContainer,
-      body: BlocSelector<SignInCubit, SignInState, SignInStatus>(
+      body: BlocSelector<AuthCubit, AuthState, AuthStatus>(
         selector: (state) => state.status,
         builder: (context, state) {
           return ProgressOverlay(
-            visible: state == SignInStatus.submissionInProgress,
+            visible: state == AuthStatus.submissionInProgress,
             child: CustomScrollView(
               slivers: [
                 SliverAppBar.large(
                   backgroundColor: colorScheme.primaryContainer,
                   elevation: 0,
                   expandedHeight: 200,
-                  title: Text('Masuk dulu yuk'),
+                  title: const Text('Masuk dulu yuk'),
                 ),
                 SliverToBoxAdapter(
                   child: Card(
@@ -156,9 +171,10 @@ class _SignInPageState extends State<SignInPage> {
                                   foregroundColor: colorScheme.onPrimary,
                                   backgroundColor: colorScheme.primary,
                                 ).copyWith(
-                                    elevation: ButtonStyleButton.allOrNull(0)),
+                                  elevation: ButtonStyleButton.allOrNull(0),
+                                ),
                                 onPressed: _onSignInWithEmailAndPasswordPressed,
-                                child: Text('Masuk sekarang'),
+                                child: const Text('Masuk sekarang'),
                               ),
                             ),
                             const SizedBox(height: 8),
@@ -166,7 +182,7 @@ class _SignInPageState extends State<SignInPage> {
                               alignment: Alignment.centerRight,
                               child: TextButton(
                                 onPressed: () {},
-                                child: Text('Aku belum punya akun'),
+                                child: const Text('Aku belum punya akun'),
                               ),
                             ),
                           ],

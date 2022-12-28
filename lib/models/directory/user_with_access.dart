@@ -4,13 +4,13 @@ import 'package:equatable/equatable.dart';
 class UserWithAccess extends Equatable {
   const UserWithAccess({required this.userId, required this.access});
 
+  final String userId;
+  final String access;
+
   factory UserWithAccess.fromJson(Map<String, dynamic> json) => UserWithAccess(
         userId: json['user_id'] as String,
         access: json['access'] as String,
       );
-
-  final String userId;
-  final String access;
 
   Map<String, dynamic> toJson() {
     return <String, dynamic>{

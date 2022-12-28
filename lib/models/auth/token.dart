@@ -14,16 +14,7 @@ class Token extends Equatable {
   final String refreshToken;
   final DateTime refreshTokenExpiresIn;
 
-  Map<String, dynamic> toMap() {
-    return <String, dynamic>{
-      'accessToken': accessToken,
-      'tokenExpiresIn': tokenExpiresIn,
-      'refreshToken': refreshToken,
-      'refreshTokenExpiresIn': refreshTokenExpiresIn,
-    };
-  }
-
-  factory Token.fromMap(Map<String, dynamic> json) {
+  factory Token.fromJson(Map<String, dynamic> json) {
     return Token(
       accessToken: json['access_token'] as String,
       tokenExpiresIn: DateTime.parse(json['token_expires_in'] as String),
@@ -31,6 +22,15 @@ class Token extends Equatable {
       refreshTokenExpiresIn:
           DateTime.parse(json['refresh_token_expires_in'] as String),
     );
+  }
+
+  Map<String, dynamic> toJson() {
+    return <String, dynamic>{
+      'access_token': accessToken,
+      'token_expires_in': tokenExpiresIn.toIso8601String(),
+      'refresh_token': refreshToken,
+      'refresh_token_expires_in': refreshTokenExpiresIn.toIso8601String(),
+    };
   }
 
   @override

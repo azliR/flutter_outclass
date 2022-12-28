@@ -91,7 +91,7 @@ class HomeWrapperPage extends StatelessWidget {
           case HomeSection.calendar:
             return const CalendarRoute();
           case HomeSection.posts:
-            return const PostsWrapperRoute();
+            return const DirectoriesTabWrapperRoute();
           case HomeSection.account:
             return const AccountWrapperRoute();
         }

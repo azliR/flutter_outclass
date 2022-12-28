@@ -6,7 +6,7 @@ class ProgressOverlay extends StatelessWidget {
     required this.visible,
     required this.child,
   });
-  
+
   final bool visible;
   final Widget? child;
 

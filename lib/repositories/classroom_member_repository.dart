@@ -1,30 +1,27 @@
 import 'dart:developer';
 
 import 'package:dio/dio.dart';
-import 'package:fresh_dio/fresh_dio.dart';
 import 'package:injectable/injectable.dart';
-import 'package:outclass/dtos/sign_in_dto.dart';
-import 'package:outclass/models/auth/token.dart';
+import 'package:outclass/models/classroom/classroom_member_profile.dart';
 import 'package:outclass/repositories/core/responses.dart';
 
 @lazySingleton
-class AuthRepository {
-  AuthRepository(this._client);
+class ClassroomMemberRepository {
+  ClassroomMemberRepository(this._client);
 
   final Dio _client;
 
-  Future<HttpResponse<Token>> signIn({
-    required SignInDto signInDto,
+  Future<HttpResponse<ClassroomMemberProfile>> getClassroomMemberProfile({
+    required String classroomId,
   }) async {
     try {
-      final response = await _client.post<Map<String, dynamic>>(
-        '/user/sign/in',
-        data: signInDto.toJson(),
+      final response = await _client.get<Map<String, dynamic>>(
+        '/classrooms/$classroomId/members/profile',
       );
 
       return HttpResponse.fromJson(
         response.data,
-        (data) => Token.fromJson(data as Map<String, dynamic>),
+        (data) => ClassroomMemberProfile.fromJson(data as Map<String, dynamic>),
       );
     } catch (e, stackTrace) {
       log(e.toString(), stackTrace: stackTrace);
