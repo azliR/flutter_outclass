@@ -1,11 +1,14 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:auto_route/empty_router_widgets.dart';
 import 'package:flutter/widgets.dart';
+import 'package:outclass/models/directory/folder.dart';
+import 'package:outclass/models/directory/post.dart';
 import 'package:outclass/views/auth/sign_in/sign_in_page.dart';
 import 'package:outclass/views/core/app_route_guards.dart';
 import 'package:outclass/views/home-wrapper/account/account_page.dart';
 import 'package:outclass/views/home-wrapper/calendar/calendar_page.dart';
 import 'package:outclass/views/home-wrapper/directories/add_folder_dialog.dart';
+import 'package:outclass/views/home-wrapper/directories/add_post_dialog.dart';
 import 'package:outclass/views/home-wrapper/directories/directories_page.dart';
 import 'package:outclass/views/home-wrapper/directories/directories_wrapper_page.dart';
 import 'package:outclass/views/home-wrapper/home_wrapper_page.dart';
@@ -63,6 +66,12 @@ part 'app_router.gr.dart';
               fullscreenDialog: true,
               page: AddFolderDialog,
               name: 'AddFolderDialogRoute',
+            ),
+            AutoRoute(
+              path: 'post/add',
+              fullscreenDialog: true,
+              page: AddPostDialog,
+              name: 'AddPostDialogRoute',
             ),
           ],
         ),

@@ -30,4 +30,26 @@ class DirectoriesCubit extends Cubit<DirectoriesState> {
     }
     return response.data!;
   }
+
+  Future<void> deleteFolder(String folderId) async {
+    emit(state.copyWith(folderStatus: DeleteDirectoryStatus.deleting));
+
+    final success = await _directoryRepository.deleteDirectory(folderId);
+    if (!success) {
+      emit(state.copyWith(folderStatus: DeleteDirectoryStatus.failure));
+      return;
+    }
+    emit(state.copyWith(folderStatus: DeleteDirectoryStatus.success));
+  }
+
+  Future<void> deletePost(String postId) async {
+    emit(state.copyWith(postStatus: DeleteDirectoryStatus.deleting));
+
+    final success = await _directoryRepository.deleteDirectory(postId);
+    if (!success) {
+      emit(state.copyWith(postStatus: DeleteDirectoryStatus.failure));
+      return;
+    }
+    emit(state.copyWith(postStatus: DeleteDirectoryStatus.success));
+  }
 }

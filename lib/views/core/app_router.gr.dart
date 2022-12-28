@@ -59,15 +59,40 @@ class _$AppRouter extends RootStackRouter {
       );
     },
     DirectoriesWrapperRoute.name: (routeData) {
+      final args = routeData.argsAs<DirectoriesWrapperRouteArgs>(
+          orElse: () => const DirectoriesWrapperRouteArgs());
       return AdaptivePage<dynamic>(
         routeData: routeData,
-        child: const DirectoriesWrapperPage(),
+        child: DirectoriesWrapperPage(key: args.key),
       );
     },
     AddFolderDialogRoute.name: (routeData) {
+      final args = routeData.argsAs<AddFolderDialogRouteArgs>();
       return AdaptivePage<dynamic>(
         routeData: routeData,
-        child: const AddFolderDialog(),
+        child: WrappedRoute(
+            child: AddFolderDialog(
+          key: args.key,
+          shareType: args.shareType,
+          parentId: args.parentId,
+          existingFolder: args.existingFolder,
+          onFolderCreated: args.onFolderCreated,
+        )),
+        fullscreenDialog: true,
+      );
+    },
+    AddPostDialogRoute.name: (routeData) {
+      final args = routeData.argsAs<AddPostDialogRouteArgs>();
+      return AdaptivePage<dynamic>(
+        routeData: routeData,
+        child: WrappedRoute(
+            child: AddPostDialog(
+          key: args.key,
+          shareType: args.shareType,
+          parentId: args.parentId,
+          existingPost: args.existingPost,
+          onPostCreated: args.onPostCreated,
+        )),
         fullscreenDialog: true,
       );
     },
@@ -163,6 +188,11 @@ class _$AppRouter extends RootStackRouter {
                 RouteConfig(
                   AddFolderDialogRoute.name,
                   path: 'folder/add',
+                  parent: DirectoriesTabWrapperRoute.name,
+                ),
+                RouteConfig(
+                  AddPostDialogRoute.name,
+                  path: 'post/add',
                   parent: DirectoriesTabWrapperRoute.name,
                 ),
               ],
@@ -266,27 +296,128 @@ class AccountWrapperRoute extends PageRouteInfo<void> {
 
 /// generated route for
 /// [DirectoriesWrapperPage]
-class DirectoriesWrapperRoute extends PageRouteInfo<void> {
-  const DirectoriesWrapperRoute({List<PageRouteInfo>? children})
-      : super(
+class DirectoriesWrapperRoute
+    extends PageRouteInfo<DirectoriesWrapperRouteArgs> {
+  DirectoriesWrapperRoute({
+    Key? key,
+    List<PageRouteInfo>? children,
+  }) : super(
           DirectoriesWrapperRoute.name,
           path: '',
+          args: DirectoriesWrapperRouteArgs(key: key),
           initialChildren: children,
         );
 
   static const String name = 'DirectoriesWrapperRoute';
 }
 
+class DirectoriesWrapperRouteArgs {
+  const DirectoriesWrapperRouteArgs({this.key});
+
+  final Key? key;
+
+  @override
+  String toString() {
+    return 'DirectoriesWrapperRouteArgs{key: $key}';
+  }
+}
+
 /// generated route for
 /// [AddFolderDialog]
-class AddFolderDialogRoute extends PageRouteInfo<void> {
-  const AddFolderDialogRoute()
-      : super(
+class AddFolderDialogRoute extends PageRouteInfo<AddFolderDialogRouteArgs> {
+  AddFolderDialogRoute({
+    Key? key,
+    required String shareType,
+    String? parentId,
+    Folder? existingFolder,
+    required void Function(Folder) onFolderCreated,
+  }) : super(
           AddFolderDialogRoute.name,
           path: 'folder/add',
+          args: AddFolderDialogRouteArgs(
+            key: key,
+            shareType: shareType,
+            parentId: parentId,
+            existingFolder: existingFolder,
+            onFolderCreated: onFolderCreated,
+          ),
         );
 
   static const String name = 'AddFolderDialogRoute';
+}
+
+class AddFolderDialogRouteArgs {
+  const AddFolderDialogRouteArgs({
+    this.key,
+    required this.shareType,
+    this.parentId,
+    this.existingFolder,
+    required this.onFolderCreated,
+  });
+
+  final Key? key;
+
+  final String shareType;
+
+  final String? parentId;
+
+  final Folder? existingFolder;
+
+  final void Function(Folder) onFolderCreated;
+
+  @override
+  String toString() {
+    return 'AddFolderDialogRouteArgs{key: $key, shareType: $shareType, parentId: $parentId, existingFolder: $existingFolder, onFolderCreated: $onFolderCreated}';
+  }
+}
+
+/// generated route for
+/// [AddPostDialog]
+class AddPostDialogRoute extends PageRouteInfo<AddPostDialogRouteArgs> {
+  AddPostDialogRoute({
+    Key? key,
+    required String shareType,
+    String? parentId,
+    Post? existingPost,
+    required void Function(Post) onPostCreated,
+  }) : super(
+          AddPostDialogRoute.name,
+          path: 'post/add',
+          args: AddPostDialogRouteArgs(
+            key: key,
+            shareType: shareType,
+            parentId: parentId,
+            existingPost: existingPost,
+            onPostCreated: onPostCreated,
+          ),
+        );
+
+  static const String name = 'AddPostDialogRoute';
+}
+
+class AddPostDialogRouteArgs {
+  const AddPostDialogRouteArgs({
+    this.key,
+    required this.shareType,
+    this.parentId,
+    this.existingPost,
+    required this.onPostCreated,
+  });
+
+  final Key? key;
+
+  final String shareType;
+
+  final String? parentId;
+
+  final Post? existingPost;
+
+  final void Function(Post) onPostCreated;
+
+  @override
+  String toString() {
+    return 'AddPostDialogRouteArgs{key: $key, shareType: $shareType, parentId: $parentId, existingPost: $existingPost, onPostCreated: $onPostCreated}';
+  }
 }
 
 /// generated route for
