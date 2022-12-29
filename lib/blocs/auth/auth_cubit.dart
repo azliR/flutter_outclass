@@ -4,10 +4,11 @@ import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:injectable/injectable.dart';
 import 'package:outclass/dtos/classroom_dto.dart';
 import 'package:outclass/dtos/sign_in_dto.dart';
+import 'package:outclass/dtos/sign_up_dto.dart';
 import 'package:outclass/dtos/token_dto.dart';
 import 'package:outclass/injectable.dart';
 import 'package:outclass/models/auth/token.dart';
-import 'package:outclass/models/classroom/classroom.dart';
+import 'package:outclass/models/classroom/classroom_member.dart';
 import 'package:outclass/repositories/auth_repository.dart';
 import 'package:outclass/repositories/classroom_repository.dart';
 import 'package:outclass/repositories/token_repository.dart';
@@ -53,7 +54,8 @@ class AuthCubit extends HydratedCubit<AuthState> {
   Future<void> signInWithEmailAndPassword(SignInDto signInDto) async {
     emit(state.copyWith(status: AuthStatus.submissionInProgress));
 
-    final response = await _authRepository.signIn(signInDto: signInDto);
+    final response =
+        await _authRepository.signInWithEmailAndPassword(signInDto: signInDto);
 
     if (!response.success) {
       emit(state.copyWith(status: AuthStatus.submissionFailure));
@@ -83,23 +85,60 @@ class AuthCubit extends HydratedCubit<AuthState> {
     }
 
     final classroomMember = classroomMembers.first;
-    final responseClassroom = await _classroomRepository.getClassroomById(
-      classroomId: classroomMember.classroomId,
+    emit(
+      state.copyWith(
+        status: AuthStatus.submissionSuccess,
+        classroomMember: classroomMember,
+      ),
     );
+  }
 
-    if (!responseClassroom.success) {
+  Future<void> signUpWithEmailAndPassword(SignUpDto signUpDto) async {
+    emit(state.copyWith(status: AuthStatus.submissionInProgress));
+
+    final response =
+        await _authRepository.signUpWithEmailAndPassword(signUpDto: signUpDto);
+
+    if (!response.success) {
       emit(state.copyWith(status: AuthStatus.submissionFailure));
       return;
     }
 
-    final classroom = responseClassroom.data!;
+    final token = response.data!.token;
+    await _tokenRepository.setToken(token);
 
     emit(
       state.copyWith(
-        status: AuthStatus.submissionSuccess,
-        classroom: classroom,
+        token: token,
+        status: AuthStatus.submissionSuccessWithNoClassroom,
       ),
     );
+  }
+
+  Future<void> joinClassroom(JoinClassroomDto dto) async {
+    emit(state.copyWith(status: AuthStatus.submissionInProgress));
+
+    final joinResponse = await _classroomRepository.joinClassroom(dto: dto);
+    if (!joinResponse.success) {
+      emit(state.copyWith(status: AuthStatus.submissionFailure));
+      return;
+    }
+
+    final classroomMember = joinResponse.data!;
+    emit(
+      state.copyWith(
+        status: AuthStatus.submissionSuccess,
+        classroomMember: classroomMember,
+      ),
+    );
+  }
+
+  Future<void> signOut() async {
+    // await _tokenRepository.deleteToken();
+    // emit(state.copyWith(
+    //   token: null,
+    //   classroom: null,
+    // ));
   }
 
   @override

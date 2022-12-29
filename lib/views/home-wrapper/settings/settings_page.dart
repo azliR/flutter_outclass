@@ -42,6 +42,9 @@ class SettingsPage extends StatelessWidget {
                 ],
               ),
             ),
+          ),
+          const SliverToBoxAdapter(
+            child: SizedBox(height: 64),
           )
         ],
       ),

@@ -3,10 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:outclass/blocs/home/directories/directories_cubit.dart';
+import 'package:outclass/blocs/home/directories_wrapper/directories_wrapper_cubit.dart';
 import 'package:outclass/dtos/directory_dto.dart';
 import 'package:outclass/models/directory/post.dart';
 import 'package:outclass/views/core/app_router.dart';
-import 'package:outclass/views/home-wrapper/directories/directories_wrapper_page.dart';
 
 enum PopupItem {
   edit,
@@ -31,8 +31,11 @@ class PostItem extends StatelessWidget {
 
     context.router.push(
       AddPostDialogRoute(
+        parentId: post.parentId ?? '',
         onPostCreated: (post) {
-          InheritedPagingController.of(context)
+          context
+              .read<DirectoriesWrapperCubit>()
+              .state
               .postPagingControllers[shareType]
               ?.refresh();
         },

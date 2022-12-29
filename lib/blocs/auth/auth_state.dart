@@ -13,12 +13,12 @@ class AuthState extends Equatable {
   const AuthState({
     required this.status,
     this.token,
-    this.classroom,
+    this.classroomMember,
   });
 
   final AuthStatus status;
   final Token? token;
-  final Classroom? classroom;
+  final ClassroomMember? classroomMember;
 
   factory AuthState.initial() => const AuthState(status: AuthStatus.initial);
 
@@ -27,30 +27,31 @@ class AuthState extends Equatable {
         token: json['token'] == null
             ? null
             : Token.fromJson(json['token'] as Map<String, dynamic>),
-        classroom: json['classroom'] == null
+        classroomMember: json['classroom'] == null
             ? null
-            : Classroom.fromJson(json['classroom'] as Map<String, dynamic>),
+            : ClassroomMember.fromJson(
+                json['classroom'] as Map<String, dynamic>),
       );
 
   AuthState copyWith({
     AuthStatus? status,
     Token? token,
-    Classroom? classroom,
+    ClassroomMember? classroomMember,
   }) {
     return AuthState(
       status: status ?? this.status,
       token: token ?? this.token,
-      classroom: classroom ?? this.classroom,
+      classroomMember: classroomMember ?? this.classroomMember,
     );
   }
 
   Map<String, dynamic> toJson() {
     return <String, dynamic>{
       'token': token?.toJson(),
-      'classroom': classroom?.toJson(),
+      'classroom': classroomMember?.toJson(),
     };
   }
 
   @override
-  List<Object?> get props => [status, token, classroom];
+  List<Object?> get props => [status, token, classroomMember];
 }

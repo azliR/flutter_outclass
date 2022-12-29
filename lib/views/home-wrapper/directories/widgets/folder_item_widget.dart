@@ -2,11 +2,11 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:outclass/blocs/home/directories/directories_cubit.dart';
+import 'package:outclass/blocs/home/directories_wrapper/directories_wrapper_cubit.dart';
 import 'package:outclass/dtos/directory_dto.dart';
 import 'package:outclass/models/directory/folder.dart';
 import 'package:outclass/views/core/app_router.dart';
 import 'package:outclass/views/core/utils/colors.dart';
-import 'package:outclass/views/home-wrapper/directories/directories_wrapper_page.dart';
 
 enum PopupItem {
   edit,
@@ -14,9 +14,14 @@ enum PopupItem {
 }
 
 class FolderItem extends StatelessWidget {
-  const FolderItem({super.key, required this.folder});
+  const FolderItem({
+    super.key,
+    required this.folder,
+    required this.onTap,
+  });
 
   final Folder folder;
+  final void Function() onTap;
 
   void _onEditPressed(BuildContext context) {
     final shareType = () {
@@ -31,8 +36,11 @@ class FolderItem extends StatelessWidget {
 
     context.router.push(
       AddFolderDialogRoute(
+        parentId: folder.parentId ?? '',
         onFolderCreated: (folder) {
-          InheritedPagingController.of(context)
+          context
+              .read<DirectoriesWrapperCubit>()
+              .state
               .folderPagingControllers[shareType]
               ?.refresh();
         },
@@ -125,14 +133,7 @@ class FolderItem extends StatelessWidget {
         ),
         tileColor: colorScheme.surfaceVariant,
         title: Text(folder.name),
-        onTap: () {
-          context.router.push(
-            DirectoriesRoute(
-              shareType: ShareType.classroom.toString(),
-              parentId: folder.id,
-            ),
-          );
-        },
+        onTap: onTap,
       ),
     );
   }

@@ -4,20 +4,21 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:outclass/blocs/auth/auth_cubit.dart';
 import 'package:outclass/blocs/home/directories/directories_cubit.dart';
+import 'package:outclass/blocs/home/directories_wrapper/directories_wrapper_cubit.dart';
 import 'package:outclass/dtos/directory_dto.dart';
 import 'package:outclass/injectable.dart';
 import 'package:outclass/models/directory/folder.dart';
 import 'package:outclass/models/directory/post.dart';
 import 'package:outclass/views/auth/sign_in/widgets/progress_overlay.dart';
-import 'package:outclass/views/home-wrapper/directories/directories_wrapper_page.dart';
+import 'package:outclass/views/core/app_router.dart';
 import 'package:outclass/views/home-wrapper/directories/widgets/folder_item_widget.dart';
 import 'package:outclass/views/home-wrapper/directories/widgets/post_item_widget.dart';
 
 class DirectoriesPage extends StatefulWidget implements AutoRouteWrapper {
   const DirectoriesPage({
     super.key,
-    @PathParam() required this.shareType,
-    @PathParam() required this.parentId,
+    @PathParam() this.shareType = 'class',
+    @QueryParam() this.parentId = '',
   });
 
   final String shareType;
@@ -47,7 +48,7 @@ class _DirectoriesPageState extends State<DirectoriesPage> {
 
     final newItems = await context.read<DirectoriesCubit>().getFolders(
           GetFoldersDto(
-            classroomId: authCubit.state.classroom!.id,
+            classroomId: authCubit.state.classroomMember!.classroomId,
             shareType: ShareType.fromString(widget.shareType),
             parentId: widget.parentId,
             page: page,
@@ -67,7 +68,7 @@ class _DirectoriesPageState extends State<DirectoriesPage> {
 
     final newItems = await context.read<DirectoriesCubit>().getPosts(
           GetPostsDto(
-            classroomId: authCubit.state.classroom!.id,
+            classroomId: authCubit.state.classroomMember!.classroomId,
             shareType: ShareType.fromString(widget.shareType),
             parentId: widget.parentId,
             page: page,
@@ -82,14 +83,38 @@ class _DirectoriesPageState extends State<DirectoriesPage> {
     }
   }
 
+  Future<void> _onFolderPressed(BuildContext context, Folder folder) async {
+    final shareType = ShareType.fromString(widget.shareType);
+
+    await context.router
+        .push(
+      DirectoriesRoute(
+        shareType: widget.shareType,
+        parentId: folder.id,
+      ),
+    )
+        .whenComplete(() {
+      context.read<DirectoriesWrapperCubit>()
+        ..setCurrentFolderId(widget.parentId)
+        ..setFolderController(
+          shareType,
+          _folderPagingController,
+        )
+        ..setPostController(shareType, _postPagingController);
+    });
+  }
+
   @override
   void didChangeDependencies() {
     final shareType = ShareType.fromString(widget.shareType);
 
-    InheritedPagingController.of(context).folderPagingControllers[shareType] =
-        _folderPagingController;
-    InheritedPagingController.of(context).postPagingControllers[shareType] =
-        _postPagingController;
+    context.read<DirectoriesWrapperCubit>()
+      ..setCurrentFolderId(widget.parentId)
+      ..setFolderController(
+        shareType,
+        _folderPagingController,
+      )
+      ..setPostController(shareType, _postPagingController);
 
     _folderPagingController.addPageRequestListener(_fetchFolders);
     _postPagingController.addPageRequestListener(_fetchPosts);
@@ -184,7 +209,10 @@ class _DirectoriesPageState extends State<DirectoriesPage> {
                           child: Text('Folder masih kosong'),
                         ),
                         itemBuilder: (context, item, index) {
-                          return FolderItem(folder: item);
+                          return FolderItem(
+                            folder: item,
+                            onTap: () => _onFolderPressed(context, item),
+                          );
                         },
                       ),
                     ),
@@ -212,6 +240,9 @@ class _DirectoriesPageState extends State<DirectoriesPage> {
                         },
                       ),
                     ),
+                  ),
+                  const SliverToBoxAdapter(
+                    child: SizedBox(height: 64),
                   )
                 ],
               ),

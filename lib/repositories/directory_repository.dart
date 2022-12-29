@@ -48,6 +48,12 @@ class DirectoryRepository {
         success: false,
         message: e.toString(),
       );
+    } catch (e, stackTrace) {
+      log(e.toString(), stackTrace: stackTrace);
+      return HttpResponse(
+        success: false,
+        message: e.toString(),
+      );
     }
   }
 
@@ -76,6 +82,12 @@ class DirectoryRepository {
               .toList(),
         );
       }
+      log(e.toString(), stackTrace: stackTrace);
+      return HttpResponse(
+        success: false,
+        message: e.toString(),
+      );
+    } catch (e, stackTrace) {
       log(e.toString(), stackTrace: stackTrace);
       return HttpResponse(
         success: false,
@@ -110,6 +122,12 @@ class DirectoryRepository {
         success: false,
         message: e.toString(),
       );
+    } catch (e, stackTrace) {
+      log(e.toString(), stackTrace: stackTrace);
+      return HttpResponse(
+        success: false,
+        message: e.toString(),
+      );
     }
   }
 
@@ -139,6 +157,12 @@ class DirectoryRepository {
         success: false,
         message: e.toString(),
       );
+    } catch (e, stackTrace) {
+      log(e.toString(), stackTrace: stackTrace);
+      return HttpResponse(
+        success: false,
+        message: e.toString(),
+      );
     }
   }
 
@@ -146,6 +170,7 @@ class DirectoryRepository {
     required AddPostDto dto,
   }) async {
     try {
+      print(await dto.toJson());
       final formData = FormData.fromMap(await dto.toJson());
       final response = await _client.post<Map<String, dynamic>>(
         '/directories/posts',
@@ -164,6 +189,12 @@ class DirectoryRepository {
           (data) => Post.fromJson(data as Map<String, dynamic>),
         );
       }
+      log(e.toString(), stackTrace: stackTrace);
+      return HttpResponse(
+        success: false,
+        message: e.toString(),
+      );
+    } catch (e, stackTrace) {
       log(e.toString(), stackTrace: stackTrace);
       return HttpResponse(
         success: false,
@@ -202,6 +233,12 @@ class DirectoryRepository {
         success: false,
         message: e.toString(),
       );
+    } catch (e, stackTrace) {
+      log(e.toString(), stackTrace: stackTrace);
+      return HttpResponse(
+        success: false,
+        message: e.toString(),
+      );
     }
   }
 
@@ -214,6 +251,9 @@ class DirectoryRepository {
         log(e.response.toString(), stackTrace: stackTrace);
         return null;
       }
+      log(e.toString(), stackTrace: stackTrace);
+      return null;
+    } catch (e, stackTrace) {
       log(e.toString(), stackTrace: stackTrace);
       return null;
     }
@@ -233,6 +273,9 @@ class DirectoryRepository {
         log(e.response.toString(), stackTrace: stackTrace);
         return false;
       }
+      log(e.toString(), stackTrace: stackTrace);
+      return false;
+    } catch (e, stackTrace) {
       log(e.toString(), stackTrace: stackTrace);
       return false;
     }

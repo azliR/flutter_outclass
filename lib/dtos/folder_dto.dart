@@ -4,7 +4,7 @@ import 'package:outclass/models/directory/folder.dart';
 class AddFolderDto extends Equatable {
   const AddFolderDto({
     this.id,
-    this.parentId,
+    required this.parentId,
     this.classroomId,
     required this.name,
     required this.color,
@@ -12,12 +12,13 @@ class AddFolderDto extends Equatable {
   });
 
   factory AddFolderDto.initial() => const AddFolderDto(
+        parentId: '',
         name: '',
         color: 'grape',
       );
 
   final String? id;
-  final String? parentId;
+  final String parentId;
   final String? classroomId;
   final String name;
   final String color;
@@ -25,7 +26,7 @@ class AddFolderDto extends Equatable {
 
   factory AddFolderDto.fromModel(Folder folder) => AddFolderDto(
         id: folder.id,
-        parentId: folder.parentId,
+        parentId: folder.parentId ?? '',
         classroomId: folder.classroomId,
         name: folder.name,
         color: folder.color,

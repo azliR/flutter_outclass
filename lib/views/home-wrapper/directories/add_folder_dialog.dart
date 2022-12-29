@@ -13,13 +13,13 @@ class AddFolderDialog extends StatelessWidget implements AutoRouteWrapper {
   const AddFolderDialog({
     super.key,
     required this.shareType,
-    this.parentId,
+    required this.parentId,
     this.existingFolder,
     required this.onFolderCreated,
   });
 
   final String shareType;
-  final String? parentId;
+  final String parentId;
   final Folder? existingFolder;
   final void Function(Folder folder) onFolderCreated;
 
@@ -30,7 +30,7 @@ class AddFolderDialog extends StatelessWidget implements AutoRouteWrapper {
     return BlocProvider(
       create: (_) => getIt<AddFolderCubit>()
         ..init(
-          classroomId: authCubit.state.classroom!.id,
+          classroomId: authCubit.state.classroomMember!.classroomId,
           existingFolder: existingFolder,
           shareType: ShareType.fromString(shareType),
           parentId: parentId,

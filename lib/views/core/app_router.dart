@@ -4,6 +4,8 @@ import 'package:flutter/widgets.dart';
 import 'package:outclass/models/directory/folder.dart';
 import 'package:outclass/models/directory/post.dart';
 import 'package:outclass/views/auth/sign_in/sign_in_page.dart';
+import 'package:outclass/views/auth/sign_in/sign_up_page.dart';
+import 'package:outclass/views/classroom/join_page.dart';
 import 'package:outclass/views/core/app_route_guards.dart';
 import 'package:outclass/views/home-wrapper/account/account_page.dart';
 import 'package:outclass/views/home-wrapper/calendar/calendar_page.dart';
@@ -23,6 +25,14 @@ part 'app_router.gr.dart';
     AutoRoute(
       path: '/in',
       page: SignInPage,
+    ),
+    AutoRoute(
+      path: '/up',
+      page: SignUpPage,
+    ),
+    AutoRoute(
+      path: '/join',
+      page: JoinPage,
     ),
     AutoRoute(
       initial: true,
@@ -52,7 +62,7 @@ part 'app_router.gr.dart';
                   page: EmptyRouterPage,
                   name: 'DirectoriesShareTypeWrapperRoute',
                   children: [
-                    RedirectRoute(path: '', redirectTo: 'class/null'),
+                    RedirectRoute(path: '', redirectTo: 'class/:parentId'),
                     AutoRoute(
                       path: ':shareType/:parentId',
                       page: DirectoriesPage,

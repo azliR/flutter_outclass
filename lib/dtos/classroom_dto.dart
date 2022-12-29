@@ -6,8 +6,23 @@ class JoinClassroomDto extends Equatable {
     required this.studentId,
   });
 
+  factory JoinClassroomDto.initial() => const JoinClassroomDto(
+        classCode: '',
+        studentId: '',
+      );
+
   final String classCode;
   final String studentId;
+
+  JoinClassroomDto copyWith({
+    String? classCode,
+    String? studentId,
+  }) {
+    return JoinClassroomDto(
+      classCode: classCode ?? this.classCode,
+      studentId: studentId ?? this.studentId,
+    );
+  }
 
   Map<String, dynamic> toJson() {
     return <String, dynamic>{

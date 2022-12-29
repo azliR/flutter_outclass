@@ -61,11 +61,17 @@ class _AppState extends State<App> {
               useMaterial3: true,
               colorScheme: lightColorScheme,
               inputDecorationTheme: const InputDecorationTheme(filled: true),
+              snackBarTheme: const SnackBarThemeData(
+                behavior: SnackBarBehavior.floating,
+              ),
             ),
             darkTheme: ThemeData(
               useMaterial3: true,
               colorScheme: darkColorScheme,
               inputDecorationTheme: const InputDecorationTheme(filled: true),
+              snackBarTheme: const SnackBarThemeData(
+                behavior: SnackBarBehavior.floating,
+              ),
             ),
             debugShowCheckedModeBanner: false,
             localizationsDelegates: AppLocalizations.localizationsDelegates,

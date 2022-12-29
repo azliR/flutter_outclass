@@ -17,7 +17,8 @@ class CalendarPage extends StatefulWidget implements AutoRouteWrapper {
 
     return BlocProvider(
       create: (_) => getIt<CalendarCubit>()
-        ..getCalendarEvents(classroomId: authCubit.state.classroom!.id),
+        ..getCalendarEvents(
+            classroomId: authCubit.state.classroomMember!.classroomId),
       child: this,
     );
   }
@@ -94,6 +95,42 @@ class EventDataSource extends CalendarDataSource {
   @override
   String getSubject(int index) {
     return appointments[index].title;
+  }
+
+  @override
+  Object? getRecurrenceId(int index) {
+    return appointments[index].id;
+  }
+
+  @override
+  String? getRecurrenceRule(int index) {
+    final event = appointments[index];
+
+    if (event.repeat == 'none') {
+      return super.getRecurrenceRule(index);
+    }
+
+    return SfCalendar.generateRRule(
+      RecurrenceProperties(
+        recurrenceType: () {
+          if (event.repeat == 'daily') {
+            return RecurrenceType.daily;
+          } else if (event.repeat == 'weekly') {
+            return RecurrenceType.weekly;
+          } else if (event.repeat == 'monthly') {
+            return RecurrenceType.monthly;
+          } else if (event.repeat == 'yearly') {
+            return RecurrenceType.yearly;
+          } else {
+            throw Exception('Invalid repeat value: ${event.repeat}');
+          }
+        }(),
+        weekDays: [WeekDays.values[event.startDate.weekday % 7]],
+        startDate: event.startDate,
+      ),
+      event.startDate,
+      event.endDate ?? event.startDate,
+    );
   }
 
   @override

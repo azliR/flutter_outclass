@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:outclass/views/core/app_router.dart';
 
-enum HomeSection { overview, calendar, posts, account }
+enum HomeSection { overview, calendar, directories, account }
 
 enum NavigationType { bottom, rail, drawer }
 
@@ -33,15 +33,15 @@ class HomeWrapperPage extends StatelessWidget {
           );
         case HomeSection.calendar:
           return const AdaptiveScaffoldDestination(
-            icon: MdiIcons.calendarTextOutline,
-            selectedIcon: MdiIcons.calendarText,
+            icon: Icons.calendar_today_outlined,
+            selectedIcon: Icons.calendar_today_rounded,
             label: 'Kalender',
           );
-        case HomeSection.posts:
+        case HomeSection.directories:
           return const AdaptiveScaffoldDestination(
             icon: Icons.folder_open_rounded,
             selectedIcon: Icons.folder_rounded,
-            label: 'Postingan',
+            label: 'Berkas',
           );
         case HomeSection.account:
           return const AdaptiveScaffoldDestination(
@@ -90,7 +90,7 @@ class HomeWrapperPage extends StatelessWidget {
             return const OverviewRoute();
           case HomeSection.calendar:
             return const CalendarRoute();
-          case HomeSection.posts:
+          case HomeSection.directories:
             return const DirectoriesTabWrapperRoute();
           case HomeSection.account:
             return const AccountWrapperRoute();

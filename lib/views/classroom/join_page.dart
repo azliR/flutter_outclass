@@ -3,18 +3,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:outclass/blocs/auth/auth_cubit.dart';
-import 'package:outclass/blocs/auth/sign_in/sign_in_cubit.dart';
+import 'package:outclass/blocs/classroom/join/join_cubit.dart';
 import 'package:outclass/injectable.dart';
 import 'package:outclass/views/auth/sign_in/widgets/progress_overlay.dart';
 import 'package:outclass/views/core/app_router.dart';
 
-class SignInPage extends StatefulWidget implements AutoRouteWrapper {
-  const SignInPage({super.key});
+class JoinPage extends StatefulWidget implements AutoRouteWrapper {
+  const JoinPage({super.key});
 
   @override
   Widget wrappedRoute(BuildContext context) {
     return BlocProvider(
-      create: (context) => getIt<SignInCubit>(),
+      create: (context) => getIt<JoinCubit>(),
       child: BlocListener<AuthCubit, AuthState>(
         listener: (context, state) {
           if (state.status == AuthStatus.submissionSuccess) {
@@ -42,22 +42,23 @@ class SignInPage extends StatefulWidget implements AutoRouteWrapper {
   }
 
   @override
-  State<SignInPage> createState() => _SignInPageState();
+  State<JoinPage> createState() => JoinPageState();
 }
 
-class _SignInPageState extends State<SignInPage> {
+class JoinPageState extends State<JoinPage> {
   final _form = GlobalKey<FormState>();
 
-  void _onSignInWithEmailAndPasswordPressed() {
+  void _onJoinPressed() {
     if (_form.currentState?.validate() ?? false) {
-      context.read<AuthCubit>().signInWithEmailAndPassword(
-            context.read<SignInCubit>().state.signInDto,
+      context.read<AuthCubit>().joinClassroom(
+            context.read<JoinCubit>().state.joinDto,
           );
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    final cubit = context.watch<JoinCubit>();
     final textTheme = Theme.of(context).textTheme;
     final colorScheme = Theme.of(context).colorScheme;
 
@@ -74,7 +75,7 @@ class _SignInPageState extends State<SignInPage> {
                   backgroundColor: colorScheme.primaryContainer,
                   elevation: 0,
                   expandedHeight: 200,
-                  title: const Text('Masuk dulu yuk'),
+                  title: const Text('Ayo join!'),
                 ),
                 SliverToBoxAdapter(
                   child: Card(
@@ -93,75 +94,42 @@ class _SignInPageState extends State<SignInPage> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              'Sebelum masuk kelas, masuk dulu pake akun kamu biar datanya bisa dibuka di semua perangkat kamu',
+                              'Masukin kode kelas kamu di bawah (psst, tanyain kodenya ke temen kamu)',
                               style: textTheme.bodyMedium,
                             ),
                             const SizedBox(height: 24),
                             TextFormField(
                               autocorrect: false,
-                              keyboardType: TextInputType.emailAddress,
-                              textInputAction: TextInputAction.go,
+                              keyboardType: TextInputType.text,
+                              textInputAction: TextInputAction.next,
                               validator: FormBuilderValidators.compose([
-                                FormBuilderValidators.required(
-                                  errorText: 'Emailnya gak boleh kosong yah.',
-                                ),
-                                FormBuilderValidators.email(
-                                  errorText: 'Emailnya kamu enggak valid.',
+                                FormBuilderValidators.equalLength(
+                                  16,
+                                  errorText: 'Kode kelas kamu enggak valid.',
                                 ),
                               ]),
-                              onChanged: (value) => context
-                                  .read<SignInCubit>()
-                                  .onEmailChanged(value),
+                              onChanged: cubit.onClassCodeChanged,
                               decoration: const InputDecoration(
-                                labelText: 'Email',
-                                icon: Icon(Icons.mail_rounded),
+                                labelText: 'Kode kelas',
+                                icon: Icon(Icons.pin_rounded),
                               ),
                             ),
                             const SizedBox(height: 16),
-                            BlocSelector<SignInCubit, SignInState, bool>(
-                              selector: (state) {
-                                return state.showPassword;
-                              },
-                              builder: (context, showPassword) {
-                                return TextFormField(
-                                  obscureText: !showPassword,
-                                  autocorrect: false,
-                                  textInputAction: TextInputAction.go,
-                                  validator: FormBuilderValidators.compose([
-                                    FormBuilderValidators.required(
-                                      errorText:
-                                          'Passwordnya gak boleh kosong yah.',
-                                    ),
-                                    FormBuilderValidators.minLength(
-                                      8,
-                                      errorText:
-                                          'Passwordnya minimal 8 karakter yah.',
-                                    ),
-                                  ]),
-                                  onFieldSubmitted: (_) =>
-                                      _onSignInWithEmailAndPasswordPressed(),
-                                  onChanged: (value) => context
-                                      .read<SignInCubit>()
-                                      .onPasswordChanged(value),
-                                  decoration: InputDecoration(
-                                    labelText: 'Password',
-                                    icon: const Icon(Icons.lock_rounded),
-                                    suffixIcon: IconButton(
-                                      icon: Icon(
-                                        showPassword
-                                            ? Icons.visibility_off_rounded
-                                            : Icons.visibility_rounded,
-                                      ),
-                                      tooltip: showPassword
-                                          ? 'Hide password'
-                                          : 'Show password',
-                                      onPressed: () => context
-                                          .read<SignInCubit>()
-                                          .toggleShowPassword(),
-                                    ),
-                                  ),
-                                );
-                              },
+                            TextFormField(
+                              autocorrect: false,
+                              textInputAction: TextInputAction.go,
+                              keyboardType: TextInputType.number,
+                              validator: FormBuilderValidators.compose([
+                                FormBuilderValidators.required(
+                                  errorText: 'NIM kamu gak boleh kosong yah.',
+                                ),
+                              ]),
+                              onFieldSubmitted: (_) => _onJoinPressed(),
+                              onChanged: cubit.onStudentIdChanged,
+                              decoration: const InputDecoration(
+                                labelText: 'NIM (Nomor Induk Mahasiswa)',
+                                icon: Icon(Icons.badge_rounded),
+                              ),
                             ),
                             const SizedBox(height: 24),
                             Align(
@@ -173,8 +141,8 @@ class _SignInPageState extends State<SignInPage> {
                                 ).copyWith(
                                   elevation: ButtonStyleButton.allOrNull(0),
                                 ),
-                                onPressed: _onSignInWithEmailAndPasswordPressed,
-                                child: const Text('Masuk sekarang'),
+                                onPressed: _onJoinPressed,
+                                child: const Text('Join kelas'),
                               ),
                             ),
                             const SizedBox(height: 8),
@@ -183,8 +151,46 @@ class _SignInPageState extends State<SignInPage> {
                               child: TextButton(
                                 onPressed: () =>
                                     context.router.push(const SignUpRoute()),
-                                child: const Text('Aku belum punya akun'),
+                                child: const Text('Buat kelas'),
                               ),
+                            ),
+                            const SizedBox(height: 24),
+                            const Center(
+                              child: Text('Kamu males ngetik?'),
+                            ),
+                            const SizedBox(height: 12),
+                            Center(
+                              child: ElevatedButton.icon(
+                                style: ElevatedButton.styleFrom(
+                                  foregroundColor: colorScheme.onPrimary,
+                                  backgroundColor: colorScheme.primary,
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 24,
+                                    vertical: 12,
+                                  ),
+                                  textStyle: textTheme.titleMedium,
+                                ).copyWith(
+                                  elevation: ButtonStyleButton.allOrNull(0),
+                                ),
+                                onPressed: () => {},
+                                icon: const Icon(
+                                  Icons.qr_code_scanner_rounded,
+                                  size: 28,
+                                ),
+                                label: const Text('Scan QR'),
+                              ),
+                            ),
+                            const SizedBox(height: 16),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text('Salah akun?'),
+                                TextButton(
+                                  onPressed: () =>
+                                      context.router.push(const SignInRoute()),
+                                  child: const Text('Masuk lagi'),
+                                ),
+                              ],
                             ),
                           ],
                         ),

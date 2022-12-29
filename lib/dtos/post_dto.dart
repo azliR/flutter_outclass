@@ -6,32 +6,35 @@ import 'package:outclass/models/directory/post.dart';
 class AddPostDto extends Equatable {
   const AddPostDto({
     this.id,
-    this.parentId,
-    this.classroomId,
+    required this.parentId,
+    required this.classroomId,
     required this.name,
-    this.description,
+    required this.description,
     required this.files,
   });
 
   factory AddPostDto.initial() => const AddPostDto(
+        parentId: '',
+        classroomId: '',
         name: '',
+        description: '',
         files: [],
       );
 
   final String? id;
-  final String? parentId;
-  final String? classroomId;
+  final String parentId;
+  final String classroomId;
   final String name;
-  final String? description;
+  final String description;
   final List<XFile> files;
 
   factory AddPostDto.fromModel(Post post) => AddPostDto(
         id: post.id,
-        parentId: post.parentId,
-        classroomId: post.classroomId,
+        parentId: post.parentId ?? '',
+        classroomId: post.classroomId ?? '',
         name: post.name,
-        description: post.description,
-        files: [],
+        description: post.description ?? '',
+        files: const [],
       );
 
   Future<Map<String, dynamic>> toJson() async => {
@@ -60,6 +63,8 @@ class AddPostDto extends Equatable {
     String? description,
     List<XFile>? files,
   }) {
+    print('parentId: ${this.parentId}');
+    print('description: ${this.description}');
     return AddPostDto(
       id: id ?? this.id,
       parentId: parentId ?? this.parentId,

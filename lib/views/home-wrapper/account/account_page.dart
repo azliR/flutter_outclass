@@ -34,12 +34,63 @@ class AccountPage extends StatelessWidget implements AutoRouteWrapper {
     );
   }
 
+  void _onLeaveClassPressed(BuildContext context) {
+    showDialog<void>(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: const Text('Keluar Kelas'),
+          content: const Text('Apakah Anda yakin ingin keluar kelas?'),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: const Text('Tidak'),
+            ),
+            TextButton(
+              onPressed: () {},
+              child: const Text('Keluar kelas'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void _onSignOutPressed(BuildContext context) {
+    showDialog<void>(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: const Text('Keluar akun'),
+          content: const Text('Apakah Anda yakin ingin keluar akun?'),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: const Text('Tidak'),
+            ),
+            TextButton(
+              onPressed: () {
+                context.read<AuthCubit>().signOut();
+                context.router.pushAndPopUntil(
+                  const SignInRoute(),
+                  predicate: (_) => false,
+                );
+              },
+              child: const Text('Keluar akun'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget wrappedRoute(BuildContext context) {
     return BlocProvider(
       create: (_) => getIt<AccountCubit>()
         ..getClassroomMemberProfile(
-          classroomId: context.read<AuthCubit>().state.classroom!.id,
+          classroomId:
+              context.read<AuthCubit>().state.classroomMember!.classroomId,
         ),
       child: BlocListener<AccountCubit, AccountState>(
         listenWhen: (previous, current) => previous.status != current.status,
@@ -199,7 +250,37 @@ class AccountPage extends StatelessWidget implements AutoRouteWrapper {
                       ],
                     ),
                   ),
-                )
+                ),
+              if (state.status != FetchProfileStatus.inProgress)
+                SliverToBoxAdapter(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: colorScheme.error,
+                          foregroundColor: colorScheme.onError,
+                        ),
+                        onPressed: () => _onLeaveClassPressed(context),
+                        child: Text('Keluar kelas'),
+                      ),
+                      const SizedBox(width: 8),
+                      OutlinedButton(
+                        style: OutlinedButton.styleFrom(
+                          side: BorderSide(
+                            color: colorScheme.error,
+                          ),
+                          foregroundColor: colorScheme.error,
+                        ),
+                        onPressed: () => _onSignOutPressed(context),
+                        child: Text('Keluar akun'),
+                      ),
+                    ],
+                  ),
+                ),
+              const SliverToBoxAdapter(
+                child: SizedBox(height: 64),
+              )
             ],
           );
         },

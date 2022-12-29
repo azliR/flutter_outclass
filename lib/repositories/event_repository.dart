@@ -29,9 +29,7 @@ class EventRepository {
         log(e.response.toString(), stackTrace: stackTrace);
         return HttpResponse.fromJson(
           e.response?.data as Map<String, dynamic>,
-          (data) => (data as List<dynamic>)
-              .map((event) => Event.fromJson(event as Map<String, dynamic>))
-              .toList(),
+          (data) => null,
         );
       }
       log(e.toString(), stackTrace: stackTrace);

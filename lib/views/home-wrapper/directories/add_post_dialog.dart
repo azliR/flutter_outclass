@@ -14,13 +14,13 @@ class AddPostDialog extends StatefulWidget implements AutoRouteWrapper {
   const AddPostDialog({
     super.key,
     required this.shareType,
-    this.parentId,
+    required this.parentId,
     this.existingPost,
     required this.onPostCreated,
   });
 
   final String shareType;
-  final String? parentId;
+  final String parentId;
   final Post? existingPost;
   final void Function(Post post) onPostCreated;
 
@@ -34,7 +34,7 @@ class AddPostDialog extends StatefulWidget implements AutoRouteWrapper {
     return BlocProvider(
       create: (_) => getIt<AddPostCubit>()
         ..init(
-          classroomId: authCubit.state.classroom!.id,
+          classroomId: authCubit.state.classroomMember!.classroomId,
           existingPost: existingPost,
           shareType: ShareType.fromString(shareType),
           parentId: parentId,

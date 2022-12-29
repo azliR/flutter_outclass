@@ -20,7 +20,7 @@ class AuthGuard extends AutoRouteGuard {
       return;
     }
 
-    final classroom = getIt<AuthCubit>().state.classroom;
+    final classroom = getIt<AuthCubit>().state.classroomMember;
     if (classroom == null) {
       router.pushAndPopUntil(
         const SignInRoute(),

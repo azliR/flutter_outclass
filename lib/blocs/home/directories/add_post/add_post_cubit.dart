@@ -19,7 +19,7 @@ class AddPostCubit extends Cubit<AddPostState> {
   void init({
     required Post? existingPost,
     required ShareType shareType,
-    required String? parentId,
+    required String parentId,
     required String? classroomId,
   }) {
     final AddPostDto dto;
@@ -28,7 +28,6 @@ class AddPostCubit extends Cubit<AddPostState> {
     } else {
       dto = AddPostDto.fromModel(existingPost);
     }
-
     emit(
       state.copyWith(
         addPostDto: dto.copyWith(
@@ -40,11 +39,13 @@ class AddPostCubit extends Cubit<AddPostState> {
   }
 
   void onPostNameChanged(String postName) {
+    print(state.addPostDto.toString());
     emit(
       state.copyWith(
         addPostDto: state.addPostDto.copyWith(name: postName),
       ),
     );
+    print(state.addPostDto.toString());
   }
 
   void onPostDescriptionChanged(String postDescription) {
@@ -59,7 +60,6 @@ class AddPostCubit extends Cubit<AddPostState> {
     emit(
       state.copyWith(
         addPostDto: state.addPostDto.copyWith(
-          // remove the same path
           files: postFiles.fold<List<XFile>>([], (newFiles, file) {
             return newFiles
                         .indexWhere((newFile) => newFile.path == file.path) ==

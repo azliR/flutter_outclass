@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:outclass/models/auth/token.dart';
 
 class User extends Equatable {
   const User({
@@ -25,4 +26,22 @@ class User extends Equatable {
 
   @override
   List<Object?> get props => [id, name, email];
+}
+
+class SignUpResponse extends Equatable {
+  const SignUpResponse({
+    required this.user,
+    required this.token,
+  });
+
+  final User user;
+  final Token token;
+
+  factory SignUpResponse.fromJson(Map<String, dynamic> json) => SignUpResponse(
+        user: User.fromJson(json['user'] as Map<String, dynamic>),
+        token: Token.fromJson(json['token'] as Map<String, dynamic>),
+      );
+
+  @override
+  List<Object?> get props => [user, token];
 }

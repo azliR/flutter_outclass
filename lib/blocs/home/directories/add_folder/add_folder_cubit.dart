@@ -17,7 +17,7 @@ class AddFolderCubit extends Cubit<AddFolderState> {
   void init({
     required Folder? existingFolder,
     required ShareType shareType,
-    required String? parentId,
+    required String parentId,
     required String? classroomId,
   }) {
     final AddFolderDto dto;

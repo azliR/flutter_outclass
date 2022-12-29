@@ -9,8 +9,8 @@ import 'package:outclass/repositories/core/cache_manager.dart';
 @module
 abstract class ClientInjectableModule {
   final options = BaseOptions(
-    // baseUrl: 'https://outclass.api.azlir.my.id/api/v1',
-    baseUrl: 'https://localhost:20109/api/v1',
+    baseUrl: 'https://outclass.api.azlir.my.id/api/v1',
+    // baseUrl: 'https://localhost:20109/api/v1',
   );
 
   @lazySingleton

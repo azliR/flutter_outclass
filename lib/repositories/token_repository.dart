@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:dio/dio.dart';
 import 'package:fresh_dio/fresh_dio.dart';
 import 'package:injectable/injectable.dart';
 import 'package:outclass/dtos/token_dto.dart';
@@ -25,6 +26,19 @@ class TokenRepository {
       return HttpResponse.fromJson(
         response.data,
         (data) => Token.fromJson(data as Map<String, dynamic>),
+      );
+    } on DioError catch (e, stackTrace) {
+      if (e.type == DioErrorType.response) {
+        log(e.response.toString(), stackTrace: stackTrace);
+        return HttpResponse.fromJson(
+          e.response?.data as Map<String, dynamic>,
+          (data) => null,
+        );
+      }
+      log(e.toString(), stackTrace: stackTrace);
+      return HttpResponse(
+        success: false,
+        message: e.toString(),
       );
     } catch (e, stackTrace) {
       log(e.toString(), stackTrace: stackTrace);

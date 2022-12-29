@@ -3,61 +3,39 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:outclass/blocs/auth/auth_cubit.dart';
-import 'package:outclass/blocs/auth/sign_in/sign_in_cubit.dart';
+import 'package:outclass/blocs/auth/sign_up/sign_up_cubit.dart';
 import 'package:outclass/injectable.dart';
 import 'package:outclass/views/auth/sign_in/widgets/progress_overlay.dart';
-import 'package:outclass/views/core/app_router.dart';
 
-class SignInPage extends StatefulWidget implements AutoRouteWrapper {
-  const SignInPage({super.key});
+class SignUpPage extends StatefulWidget implements AutoRouteWrapper {
+  const SignUpPage({super.key});
 
   @override
   Widget wrappedRoute(BuildContext context) {
     return BlocProvider(
-      create: (context) => getIt<SignInCubit>(),
-      child: BlocListener<AuthCubit, AuthState>(
-        listener: (context, state) {
-          if (state.status == AuthStatus.submissionSuccess) {
-            context.router.pushAndPopUntil(
-              const HomeWrapperRoute(),
-              predicate: (_) => false,
-            );
-          } else if (state.status ==
-              AuthStatus.submissionSuccessWithNoClassroom) {
-            context.router.pushAndPopUntil(
-              const JoinRoute(),
-              predicate: (_) => false,
-            );
-          } else if (state.status == AuthStatus.submissionFailure) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(
-                content: Text('Gagal masuk'),
-              ),
-            );
-          }
-        },
-        child: this,
-      ),
+      create: (context) => getIt<SignUpCubit>(),
+      child: this,
     );
   }
 
   @override
-  State<SignInPage> createState() => _SignInPageState();
+  State<SignUpPage> createState() => _SignUpPageState();
 }
 
-class _SignInPageState extends State<SignInPage> {
+class _SignUpPageState extends State<SignUpPage> {
   final _form = GlobalKey<FormState>();
 
-  void _onSignInWithEmailAndPasswordPressed() {
+  void _onSignUpWithEmailAndPasswordPressed() {
     if (_form.currentState?.validate() ?? false) {
-      context.read<AuthCubit>().signInWithEmailAndPassword(
-            context.read<SignInCubit>().state.signInDto,
+      context.read<AuthCubit>().signUpWithEmailAndPassword(
+            context.read<SignUpCubit>().state.signUpDto,
           );
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    final cubit = context.read<SignUpCubit>();
     final textTheme = Theme.of(context).textTheme;
     final colorScheme = Theme.of(context).colorScheme;
 
@@ -74,7 +52,7 @@ class _SignInPageState extends State<SignInPage> {
                   backgroundColor: colorScheme.primaryContainer,
                   elevation: 0,
                   expandedHeight: 200,
-                  title: const Text('Masuk dulu yuk'),
+                  title: const Text('Buat akun sekarang!'),
                 ),
                 SliverToBoxAdapter(
                   child: Card(
@@ -93,14 +71,30 @@ class _SignInPageState extends State<SignInPage> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              'Sebelum masuk kelas, masuk dulu pake akun kamu biar datanya bisa dibuka di semua perangkat kamu',
+                              'Buat akunnya gampang banget, kamu cuman perlu masukin data di bawah, langsung cuss bisa nikmatin semua fitur di OutClass!',
                               style: textTheme.bodyMedium,
                             ),
                             const SizedBox(height: 24),
                             TextFormField(
                               autocorrect: false,
+                              keyboardType: TextInputType.name,
+                              textInputAction: TextInputAction.next,
+                              validator: FormBuilderValidators.compose([
+                                FormBuilderValidators.required(
+                                  errorText: 'Namanya gak boleh kosong yah.',
+                                ),
+                              ]),
+                              onChanged: cubit.onNameChanged,
+                              decoration: const InputDecoration(
+                                labelText: 'Nama lengkap',
+                                icon: Icon(Icons.person_rounded),
+                              ),
+                            ),
+                            const SizedBox(height: 16),
+                            TextFormField(
+                              autocorrect: false,
                               keyboardType: TextInputType.emailAddress,
-                              textInputAction: TextInputAction.go,
+                              textInputAction: TextInputAction.next,
                               validator: FormBuilderValidators.compose([
                                 FormBuilderValidators.required(
                                   errorText: 'Emailnya gak boleh kosong yah.',
@@ -109,24 +103,20 @@ class _SignInPageState extends State<SignInPage> {
                                   errorText: 'Emailnya kamu enggak valid.',
                                 ),
                               ]),
-                              onChanged: (value) => context
-                                  .read<SignInCubit>()
-                                  .onEmailChanged(value),
+                              onChanged: cubit.onEmailChanged,
                               decoration: const InputDecoration(
                                 labelText: 'Email',
                                 icon: Icon(Icons.mail_rounded),
                               ),
                             ),
                             const SizedBox(height: 16),
-                            BlocSelector<SignInCubit, SignInState, bool>(
-                              selector: (state) {
-                                return state.showPassword;
-                              },
+                            BlocSelector<SignUpCubit, SignUpState, bool>(
+                              selector: (state) => state.showPassword,
                               builder: (context, showPassword) {
                                 return TextFormField(
                                   obscureText: !showPassword,
                                   autocorrect: false,
-                                  textInputAction: TextInputAction.go,
+                                  textInputAction: TextInputAction.next,
                                   validator: FormBuilderValidators.compose([
                                     FormBuilderValidators.required(
                                       errorText:
@@ -138,11 +128,7 @@ class _SignInPageState extends State<SignInPage> {
                                           'Passwordnya minimal 8 karakter yah.',
                                     ),
                                   ]),
-                                  onFieldSubmitted: (_) =>
-                                      _onSignInWithEmailAndPasswordPressed(),
-                                  onChanged: (value) => context
-                                      .read<SignInCubit>()
-                                      .onPasswordChanged(value),
+                                  onChanged: cubit.onPasswordChanged,
                                   decoration: InputDecoration(
                                     labelText: 'Password',
                                     icon: const Icon(Icons.lock_rounded),
@@ -155,9 +141,43 @@ class _SignInPageState extends State<SignInPage> {
                                       tooltip: showPassword
                                           ? 'Hide password'
                                           : 'Show password',
-                                      onPressed: () => context
-                                          .read<SignInCubit>()
-                                          .toggleShowPassword(),
+                                      onPressed: cubit.toggleShowPassword,
+                                    ),
+                                  ),
+                                );
+                              },
+                            ),
+                            const SizedBox(height: 16),
+                            BlocSelector<SignUpCubit, SignUpState, bool>(
+                              selector: (state) => state.showPassword,
+                              builder: (context, showPassword) {
+                                return TextFormField(
+                                  obscureText: !showPassword,
+                                  autocorrect: false,
+                                  textInputAction: TextInputAction.go,
+                                  validator: (value) {
+                                    if (value !=
+                                        cubit.state.signUpDto.password) {
+                                      return 'Passwordnya gak sama.';
+                                    }
+                                    return null;
+                                  },
+                                  onFieldSubmitted: (_) =>
+                                      _onSignUpWithEmailAndPasswordPressed(),
+                                  onChanged: cubit.onConfirmPasswordChanged,
+                                  decoration: InputDecoration(
+                                    labelText: 'Konfirmasi password',
+                                    icon: const SizedBox(width: 24),
+                                    suffixIcon: IconButton(
+                                      icon: Icon(
+                                        showPassword
+                                            ? Icons.visibility_off_rounded
+                                            : Icons.visibility_rounded,
+                                      ),
+                                      tooltip: showPassword
+                                          ? 'Hide password'
+                                          : 'Show password',
+                                      onPressed: cubit.toggleShowPassword,
                                     ),
                                   ),
                                 );
@@ -173,17 +193,16 @@ class _SignInPageState extends State<SignInPage> {
                                 ).copyWith(
                                   elevation: ButtonStyleButton.allOrNull(0),
                                 ),
-                                onPressed: _onSignInWithEmailAndPasswordPressed,
-                                child: const Text('Masuk sekarang'),
+                                onPressed: _onSignUpWithEmailAndPasswordPressed,
+                                child: const Text('Buat akun'),
                               ),
                             ),
                             const SizedBox(height: 8),
                             Align(
                               alignment: Alignment.centerRight,
                               child: TextButton(
-                                onPressed: () =>
-                                    context.router.push(const SignUpRoute()),
-                                child: const Text('Aku belum punya akun'),
+                                onPressed: () => context.router.pop(),
+                                child: const Text('Aku udah punya akun'),
                               ),
                             ),
                           ],

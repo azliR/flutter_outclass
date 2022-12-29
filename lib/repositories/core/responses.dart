@@ -7,7 +7,7 @@ class HttpResponse<T> {
 
   factory HttpResponse.fromJson(
     Map<String, dynamic>? json,
-    T Function(dynamic data)? fromJson,
+    T? Function(dynamic data)? fromJson,
   ) {
     if (json == null) {
       return const HttpResponse(

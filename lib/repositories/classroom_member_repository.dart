@@ -23,6 +23,19 @@ class ClassroomMemberRepository {
         response.data,
         (data) => ClassroomMemberProfile.fromJson(data as Map<String, dynamic>),
       );
+    } on DioError catch (e, stackTrace) {
+      if (e.type == DioErrorType.response) {
+        log(e.response.toString(), stackTrace: stackTrace);
+        return HttpResponse.fromJson(
+          e.response?.data as Map<String, dynamic>,
+          (data) => null,
+        );
+      }
+      log(e.toString(), stackTrace: stackTrace);
+      return HttpResponse(
+        success: false,
+        message: e.toString(),
+      );
     } catch (e, stackTrace) {
       log(e.toString(), stackTrace: stackTrace);
       return HttpResponse(
