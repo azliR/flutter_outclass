@@ -9,7 +9,7 @@ import 'package:outclass/repositories/core/cache_manager.dart';
 @module
 abstract class ClientInjectableModule {
   final options = BaseOptions(
-    baseUrl: 'https://outclass.api.azlir.my.id/api/v1',
+    baseUrl: 'https://api.outclass.azlir.my.id/api/v1',
     // baseUrl: 'https://localhost:20109/api/v1',
   );
 
@@ -19,7 +19,7 @@ abstract class ClientInjectableModule {
     refreshToken: (token, httpClient) async {
       final refreshToken = token?.refreshToken;
       if (refreshToken == null) {
-        throw DioError(
+        throw DioException(
           requestOptions: RequestOptions(path: '/user/refresh'),
           error: 'Refresh token is null',
         );
@@ -31,7 +31,7 @@ abstract class ClientInjectableModule {
       );
 
       if (newToken == null) {
-        throw DioError(
+        throw DioException(
           requestOptions: RequestOptions(path: '/user/refresh'),
           error: 'Failed to refresh token',
         );

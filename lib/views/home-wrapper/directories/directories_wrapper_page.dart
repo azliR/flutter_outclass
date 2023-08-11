@@ -5,8 +5,9 @@ import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:outclass/blocs/home/directories_wrapper/directories_wrapper_cubit.dart';
 import 'package:outclass/dtos/directory_dto.dart';
 import 'package:outclass/injectable.dart';
-import 'package:outclass/views/core/app_router.dart';
+import 'package:outclass/views/core/app_router.gr.dart';
 
+@RoutePage()
 class DirectoriesWrapperPage extends StatelessWidget
     implements AutoRouteWrapper {
   const DirectoriesWrapperPage({super.key});

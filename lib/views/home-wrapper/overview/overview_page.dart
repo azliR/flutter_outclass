@@ -1,12 +1,32 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:outclass/blocs/home/calendar/calendar_cubit.dart';
+import 'package:outclass/blocs/home/overview/overview_cubit.dart';
+import 'package:outclass/injectable.dart';
 
-class OverviewPage extends StatelessWidget {
+@RoutePage()
+class OverviewPage extends StatelessWidget implements AutoRouteWrapper {
   const OverviewPage({super.key});
+
+  @override
+  Widget wrappedRoute(BuildContext context) {
+    return BlocProvider(
+      create: (context) => getIt<OverviewCubit>(),
+      child: BlocListener<CalendarCubit, CalendarState>(
+        listener: (context, state) {
+          if (state.getEventsStatus == GetEventsStatus.success) {
+            context.read<OverviewCubit>().updateEvents(state.events);
+          }
+        },
+        child: this,
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
-    final colorScheme = Theme.of(context).colorScheme;
 
     return Scaffold(
       body: CustomScrollView(
@@ -30,13 +50,10 @@ class OverviewPage extends StatelessWidget {
                     ),
                   ),
                   const Divider(indent: 8, endIndent: 8, height: 0),
-                  CheckboxListTile(
-                    title: const Text('Presentasi OutClass'),
-                    subtitle: const Text('11:00 pm, 27 Desember 2022'),
-                    controlAffinity: ListTileControlAffinity.trailing,
-                    onChanged: (bool? value) {},
-                    value: false,
-                    secondary: const CircleAvatar(
+                  const ListTile(
+                    title: Text('Presentasi OutClass'),
+                    subtitle: Text('11:00 pm, 27 Desember 2022'),
+                    leading: CircleAvatar(
                       child: Icon(Icons.article_rounded),
                     ),
                     // onTap: () {},

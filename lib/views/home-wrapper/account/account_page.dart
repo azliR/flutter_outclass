@@ -4,9 +4,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:outclass/blocs/auth/auth_cubit.dart';
 import 'package:outclass/blocs/home/account/account_cubit.dart';
 import 'package:outclass/injectable.dart';
-import 'package:outclass/views/core/app_router.dart';
+import 'package:outclass/views/core/app_router.gr.dart';
 import 'package:pretty_qr_code/pretty_qr_code.dart';
 
+@RoutePage()
 class AccountPage extends StatelessWidget implements AutoRouteWrapper {
   const AccountPage({super.key});
 
@@ -19,7 +20,8 @@ class AccountPage extends StatelessWidget implements AutoRouteWrapper {
           title: const Text('QR Code'),
           content: Center(
             child: PrettyQr(
-              data: profile!.classCode,
+              data:
+                  'https://outclass.azlir.me/classrooms/join/${profile!.classCode}',
               roundEdges: true,
             ),
           ),
@@ -47,7 +49,13 @@ class AccountPage extends StatelessWidget implements AutoRouteWrapper {
               child: const Text('Tidak'),
             ),
             TextButton(
-              onPressed: () {},
+              onPressed: () {
+                Navigator.pop(context);
+                context.router.pushAndPopUntil(
+                  const JoinRoute(),
+                  predicate: (_) => false,
+                );
+              },
               child: const Text('Keluar kelas'),
             ),
           ],

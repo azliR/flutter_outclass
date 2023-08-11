@@ -10,6 +10,7 @@ import 'package:outclass/injectable.dart';
 import 'package:outclass/models/directory/post.dart';
 import 'package:outclass/views/auth/sign_in/widgets/progress_overlay.dart';
 
+@RoutePage(name: 'AddPostDialogRoute')
 class AddPostDialog extends StatefulWidget implements AutoRouteWrapper {
   const AddPostDialog({
     super.key,

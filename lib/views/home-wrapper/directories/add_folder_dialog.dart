@@ -9,6 +9,7 @@ import 'package:outclass/models/directory/folder.dart';
 import 'package:outclass/views/auth/sign_in/widgets/progress_overlay.dart';
 import 'package:outclass/views/core/utils/colors.dart';
 
+@RoutePage(name: 'AddFolderDialogRoute')
 class AddFolderDialog extends StatelessWidget implements AutoRouteWrapper {
   const AddFolderDialog({
     super.key,

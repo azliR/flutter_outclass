@@ -5,7 +5,7 @@ import 'package:outclass/blocs/home/directories/directories_cubit.dart';
 import 'package:outclass/blocs/home/directories_wrapper/directories_wrapper_cubit.dart';
 import 'package:outclass/dtos/directory_dto.dart';
 import 'package:outclass/models/directory/folder.dart';
-import 'package:outclass/views/core/app_router.dart';
+import 'package:outclass/views/core/app_router.gr.dart';
 import 'package:outclass/views/core/utils/colors.dart';
 
 enum PopupItem {

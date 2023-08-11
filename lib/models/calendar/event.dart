@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:outclass/models/calendar/calendar_event.dart';
 
 class Event extends Equatable {
   const Event({
@@ -26,6 +27,20 @@ class Event extends Equatable {
   final String? description;
   final DateTime lastModified;
   final DateTime dateCreated;
+
+  factory Event.fromCalendarEvent(CalendarEvent calendarEvent) => Event(
+        id: calendarEvent.id,
+        ownerId: calendarEvent.ownerId,
+        classroomId: calendarEvent.classroomId,
+        title: calendarEvent.title,
+        startDate: calendarEvent.startDate,
+        endDate: calendarEvent.endDate,
+        repeat: calendarEvent.repeat,
+        color: calendarEvent.color,
+        description: calendarEvent.description,
+        lastModified: calendarEvent.lastModified,
+        dateCreated: calendarEvent.dateCreated,
+      );
 
   factory Event.fromJson(Map<String, dynamic> json) => Event(
         id: json['id'] as String,

@@ -10,10 +10,11 @@ import 'package:outclass/injectable.dart';
 import 'package:outclass/models/directory/folder.dart';
 import 'package:outclass/models/directory/post.dart';
 import 'package:outclass/views/auth/sign_in/widgets/progress_overlay.dart';
-import 'package:outclass/views/core/app_router.dart';
+import 'package:outclass/views/core/app_router.gr.dart';
 import 'package:outclass/views/home-wrapper/directories/widgets/folder_item_widget.dart';
 import 'package:outclass/views/home-wrapper/directories/widgets/post_item_widget.dart';
 
+@RoutePage()
 class DirectoriesPage extends StatefulWidget implements AutoRouteWrapper {
   const DirectoriesPage({
     super.key,

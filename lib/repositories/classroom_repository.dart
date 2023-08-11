@@ -26,8 +26,43 @@ class ClassroomRepository {
         response.data,
         (data) => ClassroomMember.fromJson(data as Map<String, dynamic>),
       );
-    } on DioError catch (e, stackTrace) {
-      if (e.type == DioErrorType.response) {
+    } on DioException catch (e, stackTrace) {
+      if (e.type == DioExceptionType.badResponse) {
+        log(e.response.toString(), stackTrace: stackTrace);
+        return HttpResponse.fromJson(
+          e.response?.data as Map<String, dynamic>,
+          (data) => null,
+        );
+      }
+      log(e.toString(), stackTrace: stackTrace);
+      return HttpResponse(
+        success: false,
+        message: e.toString(),
+      );
+    } catch (e, stackTrace) {
+      log(e.toString(), stackTrace: stackTrace);
+      return HttpResponse(
+        success: false,
+        message: e.toString(),
+      );
+    }
+  }
+
+  Future<HttpResponse<Classroom>> createClassroom({
+    required CreateClassroomDto dto,
+  }) async {
+    try {
+      final response = await _client.post<Map<String, dynamic>>(
+        '/classrooms',
+        data: dto.toJson(),
+      );
+
+      return HttpResponse.fromJson(
+        response.data,
+        (data) => Classroom.fromJson(data as Map<String, dynamic>),
+      );
+    } on DioException catch (e, stackTrace) {
+      if (e.type == DioExceptionType.badResponse) {
         log(e.response.toString(), stackTrace: stackTrace);
         return HttpResponse.fromJson(
           e.response?.data as Map<String, dynamic>,
@@ -60,8 +95,8 @@ class ClassroomRepository {
         response.data,
         (data) => Classroom.fromJson(data as Map<String, dynamic>),
       );
-    } on DioError catch (e, stackTrace) {
-      if (e.type == DioErrorType.response) {
+    } on DioException catch (e, stackTrace) {
+      if (e.type == DioExceptionType.badResponse) {
         log(e.response.toString(), stackTrace: stackTrace);
         return HttpResponse.fromJson(
           e.response?.data as Map<String, dynamic>,
@@ -101,8 +136,8 @@ class ClassroomRepository {
             )
             .toList(),
       );
-    } on DioError catch (e, stackTrace) {
-      if (e.type == DioErrorType.response) {
+    } on DioException catch (e, stackTrace) {
+      if (e.type == DioExceptionType.badResponse) {
         log(e.response.toString(), stackTrace: stackTrace);
         return HttpResponse.fromJson(
           e.response?.data as Map<String, dynamic>,

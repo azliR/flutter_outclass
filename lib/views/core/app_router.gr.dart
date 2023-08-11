@@ -1,115 +1,101 @@
-// **************************************************************************
-// AutoRouteGenerator
-// **************************************************************************
-
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
 // **************************************************************************
-// AutoRouteGenerator
+// AutoRouterGenerator
 // **************************************************************************
-//
+
 // ignore_for_file: type=lint
+// coverage:ignore-file
 
-part of 'app_router.dart';
+// ignore_for_file: no_leading_underscores_for_library_prefixes
+import 'package:auto_route/auto_route.dart' as _i19;
+import 'package:flutter/material.dart' as _i20;
+import 'package:outclass/models/directory/folder.dart' as _i21;
+import 'package:outclass/models/directory/post.dart' as _i22;
+import 'package:outclass/views/auth/sign_in/sign_in_page.dart' as _i17;
+import 'package:outclass/views/auth/sign_in/sign_up_page.dart' as _i18;
+import 'package:outclass/views/classroom/create_classroom.dart' as _i6;
+import 'package:outclass/views/classroom/join_insert_student_id_page.dart'
+    as _i12;
+import 'package:outclass/views/classroom/join_page.dart' as _i13;
+import 'package:outclass/views/classroom/scan_page.dart' as _i15;
+import 'package:outclass/views/home-wrapper/account/account_page.dart' as _i1;
+import 'package:outclass/views/home-wrapper/account/account_wrapper_page.dart'
+    as _i2;
+import 'package:outclass/views/home-wrapper/calendar/calendar_page.dart' as _i5;
+import 'package:outclass/views/home-wrapper/directories/add_folder_dialog.dart'
+    as _i3;
+import 'package:outclass/views/home-wrapper/directories/add_post_dialog.dart'
+    as _i4;
+import 'package:outclass/views/home-wrapper/directories/directories_page.dart'
+    as _i7;
+import 'package:outclass/views/home-wrapper/directories/directories_share_type_wrapper_page.dart'
+    as _i8;
+import 'package:outclass/views/home-wrapper/directories/directories_tab_wrapper_page.dart'
+    as _i9;
+import 'package:outclass/views/home-wrapper/directories/directories_wrapper_page.dart'
+    as _i10;
+import 'package:outclass/views/home-wrapper/home_wrapper_page.dart' as _i11;
+import 'package:outclass/views/home-wrapper/overview/overview_page.dart'
+    as _i14;
+import 'package:outclass/views/home-wrapper/settings/settings_page.dart'
+    as _i16;
 
-class _$AppRouter extends RootStackRouter {
-  _$AppRouter({
-    GlobalKey<NavigatorState>? navigatorKey,
-    required this.authGuard,
-  }) : super(navigatorKey);
-
-  final AuthGuard authGuard;
+abstract class $AppRouter extends _i19.RootStackRouter {
+  $AppRouter({super.navigatorKey});
 
   @override
-  final Map<String, PageFactory> pagesMap = {
-    SignInRoute.name: (routeData) {
-      return AdaptivePage<dynamic>(
+  final Map<String, _i19.PageFactory> pagesMap = {
+    AccountRoute.name: (routeData) {
+      return _i19.AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: WrappedRoute(child: const SignInPage()),
-      );
-    },
-    SignUpRoute.name: (routeData) {
-      return AdaptivePage<dynamic>(
-        routeData: routeData,
-        child: WrappedRoute(child: const SignUpPage()),
-      );
-    },
-    JoinRoute.name: (routeData) {
-      return AdaptivePage<dynamic>(
-        routeData: routeData,
-        child: WrappedRoute(child: const JoinPage()),
-      );
-    },
-    HomeWrapperRoute.name: (routeData) {
-      return AdaptivePage<dynamic>(
-        routeData: routeData,
-        child: const HomeWrapperPage(),
-      );
-    },
-    OverviewRoute.name: (routeData) {
-      return AdaptivePage<dynamic>(
-        routeData: routeData,
-        child: const OverviewPage(),
-      );
-    },
-    CalendarRoute.name: (routeData) {
-      return AdaptivePage<dynamic>(
-        routeData: routeData,
-        child: WrappedRoute(child: const CalendarPage()),
-      );
-    },
-    DirectoriesTabWrapperRoute.name: (routeData) {
-      return AdaptivePage<dynamic>(
-        routeData: routeData,
-        child: const EmptyRouterPage(),
+        child: _i19.WrappedRoute(child: const _i1.AccountPage()),
       );
     },
     AccountWrapperRoute.name: (routeData) {
-      return AdaptivePage<dynamic>(
+      return _i19.AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: const EmptyRouterPage(),
-      );
-    },
-    DirectoriesWrapperRoute.name: (routeData) {
-      return AdaptivePage<dynamic>(
-        routeData: routeData,
-        child: WrappedRoute(child: const DirectoriesWrapperPage()),
+        child: const _i2.AccountWrapperPage(),
       );
     },
     AddFolderDialogRoute.name: (routeData) {
       final args = routeData.argsAs<AddFolderDialogRouteArgs>();
-      return AdaptivePage<dynamic>(
+      return _i19.AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: WrappedRoute(
-            child: AddFolderDialog(
+        child: _i19.WrappedRoute(
+            child: _i3.AddFolderDialog(
           key: args.key,
           shareType: args.shareType,
           parentId: args.parentId,
           existingFolder: args.existingFolder,
           onFolderCreated: args.onFolderCreated,
         )),
-        fullscreenDialog: true,
       );
     },
     AddPostDialogRoute.name: (routeData) {
       final args = routeData.argsAs<AddPostDialogRouteArgs>();
-      return AdaptivePage<dynamic>(
+      return _i19.AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: WrappedRoute(
-            child: AddPostDialog(
+        child: _i19.WrappedRoute(
+            child: _i4.AddPostDialog(
           key: args.key,
           shareType: args.shareType,
           parentId: args.parentId,
           existingPost: args.existingPost,
           onPostCreated: args.onPostCreated,
         )),
-        fullscreenDialog: true,
       );
     },
-    DirectoriesShareTypeWrapperRoute.name: (routeData) {
-      return AdaptivePage<dynamic>(
+    CalendarRoute.name: (routeData) {
+      return _i19.AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: const EmptyRouterPage(),
+        child: const _i5.CalendarPage(),
+      );
+    },
+    CreateClassroomRoute.name: (routeData) {
+      return _i19.AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: _i19.WrappedRoute(child: const _i6.CreateClassroomPage()),
       );
     },
     DirectoriesRoute.name: (routeData) {
@@ -126,248 +112,133 @@ class _$AppRouter extends RootStackRouter {
                   '',
                 ),
               ));
-      return AdaptivePage<dynamic>(
+      return _i19.AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: WrappedRoute(
-            child: DirectoriesPage(
+        child: _i19.WrappedRoute(
+            child: _i7.DirectoriesPage(
           key: args.key,
           shareType: args.shareType,
           parentId: args.parentId,
         )),
       );
     },
-    AccountRoute.name: (routeData) {
-      return AdaptivePage<dynamic>(
+    DirectoriesShareTypeWrapperRoute.name: (routeData) {
+      return _i19.AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: WrappedRoute(child: const AccountPage()),
+        child: const _i8.DirectoriesShareTypeWrapperPage(),
+      );
+    },
+    DirectoriesTabWrapperRoute.name: (routeData) {
+      return _i19.AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: const _i9.DirectoriesTabWrapperPage(),
+      );
+    },
+    DirectoriesWrapperRoute.name: (routeData) {
+      return _i19.AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: _i19.WrappedRoute(child: const _i10.DirectoriesWrapperPage()),
+      );
+    },
+    HomeWrapperRoute.name: (routeData) {
+      return _i19.AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: _i19.WrappedRoute(child: const _i11.HomeWrapperPage()),
+      );
+    },
+    JoinInsertStudentIdRoute.name: (routeData) {
+      final args = routeData.argsAs<JoinInsertStudentIdRouteArgs>();
+      return _i19.AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: _i19.WrappedRoute(
+            child: _i12.JoinInsertStudentIdPage(
+          key: args.key,
+          classCode: args.classCode,
+        )),
+      );
+    },
+    JoinRoute.name: (routeData) {
+      return _i19.AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: _i19.WrappedRoute(child: const _i13.JoinPage()),
+      );
+    },
+    OverviewRoute.name: (routeData) {
+      return _i19.AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: _i19.WrappedRoute(child: const _i14.OverviewPage()),
+      );
+    },
+    ScanRoute.name: (routeData) {
+      final args =
+          routeData.argsAs<ScanRouteArgs>(orElse: () => const ScanRouteArgs());
+      return _i19.AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: _i15.ScanPage(key: args.key),
       );
     },
     SettingsRoute.name: (routeData) {
-      return AdaptivePage<dynamic>(
+      return _i19.AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: const SettingsPage(),
+        child: const _i16.SettingsPage(),
+      );
+    },
+    SignInRoute.name: (routeData) {
+      return _i19.AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: _i19.WrappedRoute(child: const _i17.SignInPage()),
+      );
+    },
+    SignUpRoute.name: (routeData) {
+      return _i19.AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: _i19.WrappedRoute(child: const _i18.SignUpPage()),
       );
     },
   };
-
-  @override
-  List<RouteConfig> get routes => [
-        RouteConfig(
-          SignInRoute.name,
-          path: '/in',
-        ),
-        RouteConfig(
-          SignUpRoute.name,
-          path: '/up',
-        ),
-        RouteConfig(
-          JoinRoute.name,
-          path: '/join',
-        ),
-        RouteConfig(
-          HomeWrapperRoute.name,
-          path: '/',
-          guards: [authGuard],
-          children: [
-            RouteConfig(
-              OverviewRoute.name,
-              path: '',
-              parent: HomeWrapperRoute.name,
-            ),
-            RouteConfig(
-              CalendarRoute.name,
-              path: 'calendar',
-              parent: HomeWrapperRoute.name,
-            ),
-            RouteConfig(
-              DirectoriesTabWrapperRoute.name,
-              path: 'folders',
-              parent: HomeWrapperRoute.name,
-              children: [
-                RouteConfig(
-                  DirectoriesWrapperRoute.name,
-                  path: '',
-                  parent: DirectoriesTabWrapperRoute.name,
-                  children: [
-                    RouteConfig(
-                      DirectoriesShareTypeWrapperRoute.name,
-                      path: '',
-                      parent: DirectoriesWrapperRoute.name,
-                      children: [
-                        RouteConfig(
-                          '#redirect',
-                          path: '',
-                          parent: DirectoriesShareTypeWrapperRoute.name,
-                          redirectTo: 'class/:parentId',
-                          fullMatch: true,
-                        ),
-                        RouteConfig(
-                          DirectoriesRoute.name,
-                          path: ':shareType/:parentId',
-                          parent: DirectoriesShareTypeWrapperRoute.name,
-                        ),
-                      ],
-                    )
-                  ],
-                ),
-                RouteConfig(
-                  AddFolderDialogRoute.name,
-                  path: 'folder/add',
-                  parent: DirectoriesTabWrapperRoute.name,
-                ),
-                RouteConfig(
-                  AddPostDialogRoute.name,
-                  path: 'post/add',
-                  parent: DirectoriesTabWrapperRoute.name,
-                ),
-              ],
-            ),
-            RouteConfig(
-              AccountWrapperRoute.name,
-              path: 'account',
-              parent: HomeWrapperRoute.name,
-              children: [
-                RouteConfig(
-                  AccountRoute.name,
-                  path: '',
-                  parent: AccountWrapperRoute.name,
-                ),
-                RouteConfig(
-                  SettingsRoute.name,
-                  path: 'settings',
-                  parent: AccountWrapperRoute.name,
-                ),
-              ],
-            ),
-          ],
-        ),
-      ];
 }
 
 /// generated route for
-/// [SignInPage]
-class SignInRoute extends PageRouteInfo<void> {
-  const SignInRoute()
+/// [_i1.AccountPage]
+class AccountRoute extends _i19.PageRouteInfo<void> {
+  const AccountRoute({List<_i19.PageRouteInfo>? children})
       : super(
-          SignInRoute.name,
-          path: '/in',
-        );
-
-  static const String name = 'SignInRoute';
-}
-
-/// generated route for
-/// [SignUpPage]
-class SignUpRoute extends PageRouteInfo<void> {
-  const SignUpRoute()
-      : super(
-          SignUpRoute.name,
-          path: '/up',
-        );
-
-  static const String name = 'SignUpRoute';
-}
-
-/// generated route for
-/// [JoinPage]
-class JoinRoute extends PageRouteInfo<void> {
-  const JoinRoute()
-      : super(
-          JoinRoute.name,
-          path: '/join',
-        );
-
-  static const String name = 'JoinRoute';
-}
-
-/// generated route for
-/// [HomeWrapperPage]
-class HomeWrapperRoute extends PageRouteInfo<void> {
-  const HomeWrapperRoute({List<PageRouteInfo>? children})
-      : super(
-          HomeWrapperRoute.name,
-          path: '/',
+          AccountRoute.name,
           initialChildren: children,
         );
 
-  static const String name = 'HomeWrapperRoute';
+  static const String name = 'AccountRoute';
+
+  static const _i19.PageInfo<void> page = _i19.PageInfo<void>(name);
 }
 
 /// generated route for
-/// [OverviewPage]
-class OverviewRoute extends PageRouteInfo<void> {
-  const OverviewRoute()
-      : super(
-          OverviewRoute.name,
-          path: '',
-        );
-
-  static const String name = 'OverviewRoute';
-}
-
-/// generated route for
-/// [CalendarPage]
-class CalendarRoute extends PageRouteInfo<void> {
-  const CalendarRoute()
-      : super(
-          CalendarRoute.name,
-          path: 'calendar',
-        );
-
-  static const String name = 'CalendarRoute';
-}
-
-/// generated route for
-/// [EmptyRouterPage]
-class DirectoriesTabWrapperRoute extends PageRouteInfo<void> {
-  const DirectoriesTabWrapperRoute({List<PageRouteInfo>? children})
-      : super(
-          DirectoriesTabWrapperRoute.name,
-          path: 'folders',
-          initialChildren: children,
-        );
-
-  static const String name = 'DirectoriesTabWrapperRoute';
-}
-
-/// generated route for
-/// [EmptyRouterPage]
-class AccountWrapperRoute extends PageRouteInfo<void> {
-  const AccountWrapperRoute({List<PageRouteInfo>? children})
+/// [_i2.AccountWrapperPage]
+class AccountWrapperRoute extends _i19.PageRouteInfo<void> {
+  const AccountWrapperRoute({List<_i19.PageRouteInfo>? children})
       : super(
           AccountWrapperRoute.name,
-          path: 'account',
           initialChildren: children,
         );
 
   static const String name = 'AccountWrapperRoute';
+
+  static const _i19.PageInfo<void> page = _i19.PageInfo<void>(name);
 }
 
 /// generated route for
-/// [DirectoriesWrapperPage]
-class DirectoriesWrapperRoute extends PageRouteInfo<void> {
-  const DirectoriesWrapperRoute({List<PageRouteInfo>? children})
-      : super(
-          DirectoriesWrapperRoute.name,
-          path: '',
-          initialChildren: children,
-        );
-
-  static const String name = 'DirectoriesWrapperRoute';
-}
-
-/// generated route for
-/// [AddFolderDialog]
-class AddFolderDialogRoute extends PageRouteInfo<AddFolderDialogRouteArgs> {
+/// [_i3.AddFolderDialog]
+class AddFolderDialogRoute
+    extends _i19.PageRouteInfo<AddFolderDialogRouteArgs> {
   AddFolderDialogRoute({
-    Key? key,
+    _i20.Key? key,
     required String shareType,
     required String parentId,
-    Folder? existingFolder,
-    required void Function(Folder) onFolderCreated,
+    _i21.Folder? existingFolder,
+    required void Function(_i21.Folder) onFolderCreated,
+    List<_i19.PageRouteInfo>? children,
   }) : super(
           AddFolderDialogRoute.name,
-          path: 'folder/add',
           args: AddFolderDialogRouteArgs(
             key: key,
             shareType: shareType,
@@ -375,9 +246,13 @@ class AddFolderDialogRoute extends PageRouteInfo<AddFolderDialogRouteArgs> {
             existingFolder: existingFolder,
             onFolderCreated: onFolderCreated,
           ),
+          initialChildren: children,
         );
 
   static const String name = 'AddFolderDialogRoute';
+
+  static const _i19.PageInfo<AddFolderDialogRouteArgs> page =
+      _i19.PageInfo<AddFolderDialogRouteArgs>(name);
 }
 
 class AddFolderDialogRouteArgs {
@@ -389,15 +264,15 @@ class AddFolderDialogRouteArgs {
     required this.onFolderCreated,
   });
 
-  final Key? key;
+  final _i20.Key? key;
 
   final String shareType;
 
   final String parentId;
 
-  final Folder? existingFolder;
+  final _i21.Folder? existingFolder;
 
-  final void Function(Folder) onFolderCreated;
+  final void Function(_i21.Folder) onFolderCreated;
 
   @override
   String toString() {
@@ -406,17 +281,17 @@ class AddFolderDialogRouteArgs {
 }
 
 /// generated route for
-/// [AddPostDialog]
-class AddPostDialogRoute extends PageRouteInfo<AddPostDialogRouteArgs> {
+/// [_i4.AddPostDialog]
+class AddPostDialogRoute extends _i19.PageRouteInfo<AddPostDialogRouteArgs> {
   AddPostDialogRoute({
-    Key? key,
+    _i20.Key? key,
     required String shareType,
     required String parentId,
-    Post? existingPost,
-    required void Function(Post) onPostCreated,
+    _i22.Post? existingPost,
+    required void Function(_i22.Post) onPostCreated,
+    List<_i19.PageRouteInfo>? children,
   }) : super(
           AddPostDialogRoute.name,
-          path: 'post/add',
           args: AddPostDialogRouteArgs(
             key: key,
             shareType: shareType,
@@ -424,9 +299,13 @@ class AddPostDialogRoute extends PageRouteInfo<AddPostDialogRouteArgs> {
             existingPost: existingPost,
             onPostCreated: onPostCreated,
           ),
+          initialChildren: children,
         );
 
   static const String name = 'AddPostDialogRoute';
+
+  static const _i19.PageInfo<AddPostDialogRouteArgs> page =
+      _i19.PageInfo<AddPostDialogRouteArgs>(name);
 }
 
 class AddPostDialogRouteArgs {
@@ -438,15 +317,15 @@ class AddPostDialogRouteArgs {
     required this.onPostCreated,
   });
 
-  final Key? key;
+  final _i20.Key? key;
 
   final String shareType;
 
   final String parentId;
 
-  final Post? existingPost;
+  final _i22.Post? existingPost;
 
-  final void Function(Post) onPostCreated;
+  final void Function(_i22.Post) onPostCreated;
 
   @override
   String toString() {
@@ -455,28 +334,43 @@ class AddPostDialogRouteArgs {
 }
 
 /// generated route for
-/// [EmptyRouterPage]
-class DirectoriesShareTypeWrapperRoute extends PageRouteInfo<void> {
-  const DirectoriesShareTypeWrapperRoute({List<PageRouteInfo>? children})
+/// [_i5.CalendarPage]
+class CalendarRoute extends _i19.PageRouteInfo<void> {
+  const CalendarRoute({List<_i19.PageRouteInfo>? children})
       : super(
-          DirectoriesShareTypeWrapperRoute.name,
-          path: '',
+          CalendarRoute.name,
           initialChildren: children,
         );
 
-  static const String name = 'DirectoriesShareTypeWrapperRoute';
+  static const String name = 'CalendarRoute';
+
+  static const _i19.PageInfo<void> page = _i19.PageInfo<void>(name);
 }
 
 /// generated route for
-/// [DirectoriesPage]
-class DirectoriesRoute extends PageRouteInfo<DirectoriesRouteArgs> {
+/// [_i6.CreateClassroomPage]
+class CreateClassroomRoute extends _i19.PageRouteInfo<void> {
+  const CreateClassroomRoute({List<_i19.PageRouteInfo>? children})
+      : super(
+          CreateClassroomRoute.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'CreateClassroomRoute';
+
+  static const _i19.PageInfo<void> page = _i19.PageInfo<void>(name);
+}
+
+/// generated route for
+/// [_i7.DirectoriesPage]
+class DirectoriesRoute extends _i19.PageRouteInfo<DirectoriesRouteArgs> {
   DirectoriesRoute({
-    Key? key,
+    _i20.Key? key,
     String shareType = 'class',
     String parentId = '',
+    List<_i19.PageRouteInfo>? children,
   }) : super(
           DirectoriesRoute.name,
-          path: ':shareType/:parentId',
           args: DirectoriesRouteArgs(
             key: key,
             shareType: shareType,
@@ -484,9 +378,13 @@ class DirectoriesRoute extends PageRouteInfo<DirectoriesRouteArgs> {
           ),
           rawPathParams: {'shareType': shareType},
           rawQueryParams: {'parentId': parentId},
+          initialChildren: children,
         );
 
   static const String name = 'DirectoriesRoute';
+
+  static const _i19.PageInfo<DirectoriesRouteArgs> page =
+      _i19.PageInfo<DirectoriesRouteArgs>(name);
 }
 
 class DirectoriesRouteArgs {
@@ -496,7 +394,7 @@ class DirectoriesRouteArgs {
     this.parentId = '',
   });
 
-  final Key? key;
+  final _i20.Key? key;
 
   final String shareType;
 
@@ -509,25 +407,195 @@ class DirectoriesRouteArgs {
 }
 
 /// generated route for
-/// [AccountPage]
-class AccountRoute extends PageRouteInfo<void> {
-  const AccountRoute()
+/// [_i8.DirectoriesShareTypeWrapperPage]
+class DirectoriesShareTypeWrapperRoute extends _i19.PageRouteInfo<void> {
+  const DirectoriesShareTypeWrapperRoute({List<_i19.PageRouteInfo>? children})
       : super(
-          AccountRoute.name,
-          path: '',
+          DirectoriesShareTypeWrapperRoute.name,
+          initialChildren: children,
         );
 
-  static const String name = 'AccountRoute';
+  static const String name = 'DirectoriesShareTypeWrapperRoute';
+
+  static const _i19.PageInfo<void> page = _i19.PageInfo<void>(name);
 }
 
 /// generated route for
-/// [SettingsPage]
-class SettingsRoute extends PageRouteInfo<void> {
-  const SettingsRoute()
+/// [_i9.DirectoriesTabWrapperPage]
+class DirectoriesTabWrapperRoute extends _i19.PageRouteInfo<void> {
+  const DirectoriesTabWrapperRoute({List<_i19.PageRouteInfo>? children})
+      : super(
+          DirectoriesTabWrapperRoute.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'DirectoriesTabWrapperRoute';
+
+  static const _i19.PageInfo<void> page = _i19.PageInfo<void>(name);
+}
+
+/// generated route for
+/// [_i10.DirectoriesWrapperPage]
+class DirectoriesWrapperRoute extends _i19.PageRouteInfo<void> {
+  const DirectoriesWrapperRoute({List<_i19.PageRouteInfo>? children})
+      : super(
+          DirectoriesWrapperRoute.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'DirectoriesWrapperRoute';
+
+  static const _i19.PageInfo<void> page = _i19.PageInfo<void>(name);
+}
+
+/// generated route for
+/// [_i11.HomeWrapperPage]
+class HomeWrapperRoute extends _i19.PageRouteInfo<void> {
+  const HomeWrapperRoute({List<_i19.PageRouteInfo>? children})
+      : super(
+          HomeWrapperRoute.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'HomeWrapperRoute';
+
+  static const _i19.PageInfo<void> page = _i19.PageInfo<void>(name);
+}
+
+/// generated route for
+/// [_i12.JoinInsertStudentIdPage]
+class JoinInsertStudentIdRoute
+    extends _i19.PageRouteInfo<JoinInsertStudentIdRouteArgs> {
+  JoinInsertStudentIdRoute({
+    _i20.Key? key,
+    required String classCode,
+    List<_i19.PageRouteInfo>? children,
+  }) : super(
+          JoinInsertStudentIdRoute.name,
+          args: JoinInsertStudentIdRouteArgs(
+            key: key,
+            classCode: classCode,
+          ),
+          initialChildren: children,
+        );
+
+  static const String name = 'JoinInsertStudentIdRoute';
+
+  static const _i19.PageInfo<JoinInsertStudentIdRouteArgs> page =
+      _i19.PageInfo<JoinInsertStudentIdRouteArgs>(name);
+}
+
+class JoinInsertStudentIdRouteArgs {
+  const JoinInsertStudentIdRouteArgs({
+    this.key,
+    required this.classCode,
+  });
+
+  final _i20.Key? key;
+
+  final String classCode;
+
+  @override
+  String toString() {
+    return 'JoinInsertStudentIdRouteArgs{key: $key, classCode: $classCode}';
+  }
+}
+
+/// generated route for
+/// [_i13.JoinPage]
+class JoinRoute extends _i19.PageRouteInfo<void> {
+  const JoinRoute({List<_i19.PageRouteInfo>? children})
+      : super(
+          JoinRoute.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'JoinRoute';
+
+  static const _i19.PageInfo<void> page = _i19.PageInfo<void>(name);
+}
+
+/// generated route for
+/// [_i14.OverviewPage]
+class OverviewRoute extends _i19.PageRouteInfo<void> {
+  const OverviewRoute({List<_i19.PageRouteInfo>? children})
+      : super(
+          OverviewRoute.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'OverviewRoute';
+
+  static const _i19.PageInfo<void> page = _i19.PageInfo<void>(name);
+}
+
+/// generated route for
+/// [_i15.ScanPage]
+class ScanRoute extends _i19.PageRouteInfo<ScanRouteArgs> {
+  ScanRoute({
+    _i20.Key? key,
+    List<_i19.PageRouteInfo>? children,
+  }) : super(
+          ScanRoute.name,
+          args: ScanRouteArgs(key: key),
+          initialChildren: children,
+        );
+
+  static const String name = 'ScanRoute';
+
+  static const _i19.PageInfo<ScanRouteArgs> page =
+      _i19.PageInfo<ScanRouteArgs>(name);
+}
+
+class ScanRouteArgs {
+  const ScanRouteArgs({this.key});
+
+  final _i20.Key? key;
+
+  @override
+  String toString() {
+    return 'ScanRouteArgs{key: $key}';
+  }
+}
+
+/// generated route for
+/// [_i16.SettingsPage]
+class SettingsRoute extends _i19.PageRouteInfo<void> {
+  const SettingsRoute({List<_i19.PageRouteInfo>? children})
       : super(
           SettingsRoute.name,
-          path: 'settings',
+          initialChildren: children,
         );
 
   static const String name = 'SettingsRoute';
+
+  static const _i19.PageInfo<void> page = _i19.PageInfo<void>(name);
+}
+
+/// generated route for
+/// [_i17.SignInPage]
+class SignInRoute extends _i19.PageRouteInfo<void> {
+  const SignInRoute({List<_i19.PageRouteInfo>? children})
+      : super(
+          SignInRoute.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'SignInRoute';
+
+  static const _i19.PageInfo<void> page = _i19.PageInfo<void>(name);
+}
+
+/// generated route for
+/// [_i18.SignUpPage]
+class SignUpRoute extends _i19.PageRouteInfo<void> {
+  const SignUpRoute({List<_i19.PageRouteInfo>? children})
+      : super(
+          SignUpRoute.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'SignUpRoute';
+
+  static const _i19.PageInfo<void> page = _i19.PageInfo<void>(name);
 }

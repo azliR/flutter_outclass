@@ -1,27 +1,14 @@
-import 'package:auto_route/auto_route.dart';
+import 'package:auto_route/annotations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:outclass/blocs/auth/auth_cubit.dart';
 import 'package:outclass/blocs/home/calendar/calendar_cubit.dart';
-import 'package:outclass/injectable.dart';
 import 'package:outclass/models/calendar/calendar_event.dart';
 import 'package:outclass/views/core/utils/colors.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 
-class CalendarPage extends StatefulWidget implements AutoRouteWrapper {
+@RoutePage()
+class CalendarPage extends StatefulWidget {
   const CalendarPage({super.key});
-
-  @override
-  Widget wrappedRoute(BuildContext context) {
-    final authCubit = context.read<AuthCubit>();
-
-    return BlocProvider(
-      create: (_) => getIt<CalendarCubit>()
-        ..getCalendarEvents(
-            classroomId: authCubit.state.classroomMember!.classroomId),
-      child: this,
-    );
-  }
 
   @override
   State<CalendarPage> createState() => _CalendarPageState();

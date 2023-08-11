@@ -1,109 +1,99 @@
 import 'package:auto_route/auto_route.dart';
-import 'package:auto_route/empty_router_widgets.dart';
-import 'package:flutter/widgets.dart';
-import 'package:outclass/models/directory/folder.dart';
-import 'package:outclass/models/directory/post.dart';
-import 'package:outclass/views/auth/sign_in/sign_in_page.dart';
-import 'package:outclass/views/auth/sign_in/sign_up_page.dart';
-import 'package:outclass/views/classroom/join_page.dart';
 import 'package:outclass/views/core/app_route_guards.dart';
-import 'package:outclass/views/home-wrapper/account/account_page.dart';
-import 'package:outclass/views/home-wrapper/calendar/calendar_page.dart';
-import 'package:outclass/views/home-wrapper/directories/add_folder_dialog.dart';
-import 'package:outclass/views/home-wrapper/directories/add_post_dialog.dart';
-import 'package:outclass/views/home-wrapper/directories/directories_page.dart';
-import 'package:outclass/views/home-wrapper/directories/directories_wrapper_page.dart';
-import 'package:outclass/views/home-wrapper/home_wrapper_page.dart';
-import 'package:outclass/views/home-wrapper/overview/overview_page.dart';
-import 'package:outclass/views/home-wrapper/settings/settings_page.dart';
+import 'package:outclass/views/core/app_router.gr.dart';
 
-part 'app_router.gr.dart';
-
-@AdaptiveAutoRouter(
-  replaceInRouteName: 'Page,Route',
-  routes: [
-    AutoRoute(
-      path: '/in',
-      page: SignInPage,
-    ),
-    AutoRoute(
-      path: '/up',
-      page: SignUpPage,
-    ),
-    AutoRoute(
-      path: '/join',
-      page: JoinPage,
-    ),
-    AutoRoute(
-      initial: true,
-      path: '/',
-      page: HomeWrapperPage,
-      guards: [AuthGuard],
-      children: [
+@AutoRouterConfig(replaceInRouteName: 'Page,Route')
+class AppRouter extends $AppRouter {
+  @override
+  List<AutoRoute> get routes => [
         AutoRoute(
-          path: '',
-          page: OverviewPage,
+          path: '/in',
+          page: SignInRoute.page,
         ),
         AutoRoute(
-          path: 'calendar',
-          page: CalendarPage,
+          path: '/up',
+          page: SignUpRoute.page,
         ),
         AutoRoute(
-          path: 'folders',
-          page: EmptyRouterPage,
-          name: 'DirectoriesTabWrapperRoute',
+          path: '/join',
+          page: JoinRoute.page,
+        ),
+        AutoRoute(
+          path: '/join/student',
+          page: JoinInsertStudentIdRoute.page,
+        ),
+        AutoRoute(
+          path: '/join/create',
+          page: CreateClassroomRoute.page,
+        ),
+        AutoRoute(
+          path: '/scan',
+          page: ScanRoute.page,
+        ),
+        AutoRoute(
+          initial: true,
+          path: '/',
+          page: HomeWrapperRoute.page,
+          guards: [
+            AuthGuard(),
+          ],
           children: [
             AutoRoute(
               path: '',
-              page: DirectoriesWrapperPage,
+              page: OverviewRoute.page,
+            ),
+            AutoRoute(
+              path: 'calendar',
+              page: CalendarRoute.page,
+            ),
+            AutoRoute(
+              path: 'folders',
+              page: DirectoriesTabWrapperRoute.page,
               children: [
                 AutoRoute(
                   path: '',
-                  page: EmptyRouterPage,
-                  name: 'DirectoriesShareTypeWrapperRoute',
+                  page: DirectoriesWrapperRoute.page,
                   children: [
-                    RedirectRoute(path: '', redirectTo: 'class/:parentId'),
                     AutoRoute(
-                      path: ':shareType/:parentId',
-                      page: DirectoriesPage,
+                      path: '',
+                      page: DirectoriesShareTypeWrapperRoute.page,
+                      children: [
+                        RedirectRoute(path: '', redirectTo: 'class/:parentId'),
+                        AutoRoute(
+                          path: ':shareType/:parentId',
+                          page: DirectoriesRoute.page,
+                        ),
+                      ],
                     ),
                   ],
+                ),
+                AutoRoute(
+                  path: 'folder/add',
+                  fullscreenDialog: true,
+                  page: AddFolderDialogRoute.page,
+                ),
+                AutoRoute(
+                  path: 'post/add',
+                  fullscreenDialog: true,
+                  page: AddPostDialogRoute.page,
                 ),
               ],
             ),
             AutoRoute(
-              path: 'folder/add',
-              fullscreenDialog: true,
-              page: AddFolderDialog,
-              name: 'AddFolderDialogRoute',
-            ),
-            AutoRoute(
-              path: 'post/add',
-              fullscreenDialog: true,
-              page: AddPostDialog,
-              name: 'AddPostDialogRoute',
-            ),
-          ],
-        ),
-        AutoRoute(
-          path: 'account',
-          page: EmptyRouterPage,
-          name: 'AccountWrapperRoute',
-          children: [
-            AutoRoute(
-              path: '',
-              page: AccountPage,
-            ),
-            AutoRoute(
-              path: 'settings',
-              page: SettingsPage,
+              path: 'account',
+              page: AccountWrapperRoute.page,
+              children: [
+                AutoRoute(
+                  path: '',
+                  page: AccountRoute.page,
+                ),
+                AutoRoute(
+                  path: 'settings',
+                  page: SettingsRoute.page,
+                ),
+              ],
             ),
           ],
         ),
-      ],
-    ),
-  ],
-)
-class AppRouter extends _$AppRouter {
-  AppRouter({required super.authGuard});
+      ];
 }

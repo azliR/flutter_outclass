@@ -27,8 +27,8 @@ class TokenRepository {
         response.data,
         (data) => Token.fromJson(data as Map<String, dynamic>),
       );
-    } on DioError catch (e, stackTrace) {
-      if (e.type == DioErrorType.response) {
+    } on DioException catch (e, stackTrace) {
+      if (e.type == DioExceptionType.badResponse) {
         log(e.response.toString(), stackTrace: stackTrace);
         return HttpResponse.fromJson(
           e.response?.data as Map<String, dynamic>,

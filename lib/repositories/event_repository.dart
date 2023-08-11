@@ -24,8 +24,8 @@ class EventRepository {
             .map((event) => Event.fromJson(event as Map<String, dynamic>))
             .toList(),
       );
-    } on DioError catch (e, stackTrace) {
-      if (e.type == DioErrorType.response) {
+    } on DioException catch (e, stackTrace) {
+      if (e.type == DioExceptionType.badResponse) {
         log(e.response.toString(), stackTrace: stackTrace);
         return HttpResponse.fromJson(
           e.response?.data as Map<String, dynamic>,

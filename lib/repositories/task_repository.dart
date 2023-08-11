@@ -25,8 +25,8 @@ class TaskRepository {
             .map((task) => Task.fromJson(task as Map<String, dynamic>))
             .toList(),
       );
-    } on DioError catch (e, stackTrace) {
-      if (e.type == DioErrorType.response) {
+    } on DioException catch (e, stackTrace) {
+      if (e.type == DioExceptionType.badResponse) {
         log(e.response.toString(), stackTrace: stackTrace);
         return HttpResponse.fromJson(
           e.response?.data as Map<String, dynamic>,

@@ -1,8 +1,12 @@
 import 'package:animations/animations.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
-import 'package:outclass/views/core/app_router.dart';
+import 'package:outclass/blocs/auth/auth_cubit.dart';
+import 'package:outclass/blocs/home/calendar/calendar_cubit.dart';
+import 'package:outclass/injectable.dart';
+import 'package:outclass/views/core/app_router.gr.dart';
 
 enum HomeSection { overview, calendar, directories, account }
 
@@ -19,14 +23,15 @@ class AdaptiveScaffoldDestination {
   final IconData selectedIcon;
 }
 
-class HomeWrapperPage extends StatelessWidget {
+@RoutePage()
+class HomeWrapperPage extends StatelessWidget implements AutoRouteWrapper {
   const HomeWrapperPage({super.key});
 
   List<AdaptiveScaffoldDestination> _getDestinations(BuildContext context) {
     return HomeSection.values.map((section) {
       switch (section) {
         case HomeSection.overview:
-          return const AdaptiveScaffoldDestination(
+          return AdaptiveScaffoldDestination(
             icon: MdiIcons.homeVariantOutline,
             selectedIcon: Icons.home_filled,
             label: 'Beranda',
@@ -63,6 +68,19 @@ class HomeWrapperPage extends StatelessWidget {
   }
 
   @override
+  Widget wrappedRoute(BuildContext context) {
+    final authCubit = context.read<AuthCubit>();
+
+    return BlocProvider(
+      create: (_) => getIt<CalendarCubit>()
+        ..getCalendarEvents(
+          classroomId: authCubit.state.classroomMember!.classroomId,
+        ),
+      child: this,
+    );
+  }
+
+  @override
   Widget build(BuildContext context) {
     final data = MediaQuery.of(context);
     final destinations = _getDestinations(context);
@@ -96,7 +114,14 @@ class HomeWrapperPage extends StatelessWidget {
             return const AccountWrapperRoute();
         }
       }).toList(),
-      builder: (context, child, animation) {
+      transitionBuilder: (context, child, animation) {
+        return FadeThroughTransition(
+          animation: animation,
+          secondaryAnimation: ReverseAnimation(animation),
+          child: child,
+        );
+      },
+      builder: (context, child) {
         final tabsRouter = AutoTabsRouter.of(context);
 
         return WillPopScope(
@@ -138,11 +163,7 @@ class HomeWrapperPage extends StatelessWidget {
                   const VerticalDivider(width: 1, thickness: 0.2),
                 ],
                 Expanded(
-                  child: FadeThroughTransition(
-                    animation: animation,
-                    secondaryAnimation: ReverseAnimation(animation),
-                    child: child,
-                  ),
+                  child: child,
                 ),
               ],
             ),

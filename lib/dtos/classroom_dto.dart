@@ -35,6 +35,47 @@ class JoinClassroomDto extends Equatable {
   List<Object?> get props => [classCode, studentId];
 }
 
+class CreateClassroomDto extends Equatable {
+  const CreateClassroomDto({
+    required this.className,
+    required this.classDesc,
+    required this.studentId,
+  });
+
+  factory CreateClassroomDto.initial() => const CreateClassroomDto(
+        className: '',
+        classDesc: '',
+        studentId: '',
+      );
+
+  final String className;
+  final String classDesc;
+  final String studentId;
+
+  CreateClassroomDto copyWith({
+    String? className,
+    String? classDesc,
+    String? studentId,
+  }) {
+    return CreateClassroomDto(
+      className: className ?? this.className,
+      classDesc: classDesc ?? this.classDesc,
+      studentId: studentId ?? this.studentId,
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return <String, dynamic>{
+      'name': className,
+      'description': classDesc,
+      'student_id': studentId,
+    };
+  }
+
+  @override
+  List<Object?> get props => [className, classDesc, studentId];
+}
+
 class GetClassroomsByUserIdDto {
   const GetClassroomsByUserIdDto({
     required this.page,

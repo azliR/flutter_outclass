@@ -5,7 +5,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:outclass/blocs/auth/auth_cubit.dart';
 import 'package:outclass/injectable.dart';
 import 'package:outclass/l10n/l10n.dart';
-import 'package:outclass/views/core/app_route_guards.dart';
 import 'package:outclass/views/core/app_router.dart';
 
 class App extends StatefulWidget {
@@ -16,7 +15,7 @@ class App extends StatefulWidget {
 }
 
 class _AppState extends State<App> {
-  final _appRouter = AppRouter(authGuard: AuthGuard());
+  final _appRouter = AppRouter();
 
   final _defaultColor = Colors.blue;
 

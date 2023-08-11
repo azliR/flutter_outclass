@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:outclass/models/calendar/calendar_event.dart';
 
 class Task extends Equatable {
   const Task({
@@ -26,6 +27,20 @@ class Task extends Equatable {
   final List<TaskFile>? files;
   final DateTime lastModified;
   final DateTime dateCreated;
+
+  factory Task.fromCalendarEvent(CalendarEvent calendarEvent) => Task(
+        id: calendarEvent.id,
+        ownerId: calendarEvent.ownerId,
+        classroomId: calendarEvent.classroomId,
+        title: calendarEvent.title,
+        details: calendarEvent.description,
+        date: calendarEvent.startDate,
+        repeat: calendarEvent.repeat,
+        color: calendarEvent.color,
+        files: const [],
+        lastModified: calendarEvent.lastModified,
+        dateCreated: calendarEvent.dateCreated,
+      );
 
   factory Task.fromJson(Map<String, dynamic> json) => Task(
         id: json['id'] as String,

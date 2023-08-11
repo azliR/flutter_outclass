@@ -6,8 +6,9 @@ import 'package:outclass/blocs/auth/auth_cubit.dart';
 import 'package:outclass/blocs/classroom/join/join_cubit.dart';
 import 'package:outclass/injectable.dart';
 import 'package:outclass/views/auth/sign_in/widgets/progress_overlay.dart';
-import 'package:outclass/views/core/app_router.dart';
+import 'package:outclass/views/core/app_router.gr.dart';
 
+@RoutePage()
 class JoinPage extends StatefulWidget implements AutoRouteWrapper {
   const JoinPage({super.key});
 
@@ -149,8 +150,8 @@ class JoinPageState extends State<JoinPage> {
                             Align(
                               alignment: Alignment.centerRight,
                               child: TextButton(
-                                onPressed: () =>
-                                    context.router.push(const SignUpRoute()),
+                                onPressed: () => context.router
+                                    .push(const CreateClassroomRoute()),
                                 child: const Text('Buat kelas'),
                               ),
                             ),
@@ -172,7 +173,9 @@ class JoinPageState extends State<JoinPage> {
                                 ).copyWith(
                                   elevation: ButtonStyleButton.allOrNull(0),
                                 ),
-                                onPressed: () => {},
+                                onPressed: () => context.router.push(
+                                  ScanRoute(),
+                                ),
                                 icon: const Icon(
                                   Icons.qr_code_scanner_rounded,
                                   size: 28,

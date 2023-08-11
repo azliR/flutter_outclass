@@ -133,6 +133,32 @@ class AuthCubit extends HydratedCubit<AuthState> {
     );
   }
 
+  Future<void> createClassroom(CreateClassroomDto dto) async {
+    emit(state.copyWith(status: AuthStatus.submissionInProgress));
+
+    final joinResponse = await _classroomRepository.createClassroom(dto: dto);
+    if (!joinResponse.success) {
+      emit(state.copyWith(status: AuthStatus.submissionFailure));
+      return;
+    }
+    final classroom = joinResponse.data!;
+
+    emit(
+      state.copyWith(
+        status: AuthStatus.submissionSuccess,
+        classroomMember: ClassroomMember(
+          id: '',
+          userId: '',
+          classroomId: classroom.id,
+          studentId: '',
+          classroomName: '',
+          name: '',
+          role: 1,
+        ),
+      ),
+    );
+  }
+
   Future<void> signOut() async {
     // await _tokenRepository.deleteToken();
     // emit(state.copyWith(

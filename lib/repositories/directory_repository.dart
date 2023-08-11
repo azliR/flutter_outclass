@@ -33,8 +33,8 @@ class DirectoryRepository {
             .map((folder) => Folder.fromJson(folder as Map<String, dynamic>))
             .toList(),
       );
-    } on DioError catch (e, stackTrace) {
-      if (e.type == DioErrorType.response) {
+    } on DioException catch (e, stackTrace) {
+      if (e.type == DioExceptionType.badResponse) {
         log(e.response.toString(), stackTrace: stackTrace);
         return HttpResponse.fromJson(
           e.response?.data as Map<String, dynamic>,
@@ -72,8 +72,8 @@ class DirectoryRepository {
             .map((post) => Post.fromJson(post as Map<String, dynamic>))
             .toList(),
       );
-    } on DioError catch (e, stackTrace) {
-      if (e.type == DioErrorType.response) {
+    } on DioException catch (e, stackTrace) {
+      if (e.type == DioExceptionType.badResponse) {
         log(e.response.toString(), stackTrace: stackTrace);
         return HttpResponse.fromJson(
           e.response?.data as Map<String, dynamic>,
@@ -109,8 +109,8 @@ class DirectoryRepository {
         response.data,
         (data) => Folder.fromJson(data as Map<String, dynamic>),
       );
-    } on DioError catch (e, stackTrace) {
-      if (e.type == DioErrorType.response) {
+    } on DioException catch (e, stackTrace) {
+      if (e.type == DioExceptionType.badResponse) {
         log(e.response.toString(), stackTrace: stackTrace);
         return HttpResponse.fromJson(
           e.response?.data as Map<String, dynamic>,
@@ -144,8 +144,8 @@ class DirectoryRepository {
         response.data,
         (data) => Folder.fromJson(data as Map<String, dynamic>),
       );
-    } on DioError catch (e, stackTrace) {
-      if (e.type == DioErrorType.response) {
+    } on DioException catch (e, stackTrace) {
+      if (e.type == DioExceptionType.badResponse) {
         log(e.response.toString(), stackTrace: stackTrace);
         return HttpResponse.fromJson(
           e.response?.data as Map<String, dynamic>,
@@ -181,8 +181,8 @@ class DirectoryRepository {
         response.data,
         (data) => Post.fromJson(data as Map<String, dynamic>),
       );
-    } on DioError catch (e, stackTrace) {
-      if (e.type == DioErrorType.response) {
+    } on DioException catch (e, stackTrace) {
+      if (e.type == DioExceptionType.badResponse) {
         log(e.response.toString(), stackTrace: stackTrace);
         return HttpResponse.fromJson(
           e.response?.data as Map<String, dynamic>,
@@ -220,8 +220,8 @@ class DirectoryRepository {
         response.data,
         (data) => Post.fromJson(data as Map<String, dynamic>),
       );
-    } on DioError catch (e, stackTrace) {
-      if (e.type == DioErrorType.response) {
+    } on DioException catch (e, stackTrace) {
+      if (e.type == DioExceptionType.badResponse) {
         log(e.response.toString(), stackTrace: stackTrace);
         return HttpResponse.fromJson(
           e.response?.data as Map<String, dynamic>,
@@ -246,8 +246,8 @@ class DirectoryRepository {
     try {
       final response = await _cacheManager.getFile(url);
       return response;
-    } on DioError catch (e, stackTrace) {
-      if (e.type == DioErrorType.response) {
+    } on DioException catch (e, stackTrace) {
+      if (e.type == DioExceptionType.badResponse) {
         log(e.response.toString(), stackTrace: stackTrace);
         return null;
       }
@@ -268,8 +268,8 @@ class DirectoryRepository {
       );
 
       return response.statusCode == 204;
-    } on DioError catch (e, stackTrace) {
-      if (e.type == DioErrorType.response) {
+    } on DioException catch (e, stackTrace) {
+      if (e.type == DioExceptionType.badResponse) {
         log(e.response.toString(), stackTrace: stackTrace);
         return false;
       }

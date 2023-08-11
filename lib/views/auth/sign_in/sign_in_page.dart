@@ -6,8 +6,9 @@ import 'package:outclass/blocs/auth/auth_cubit.dart';
 import 'package:outclass/blocs/auth/sign_in/sign_in_cubit.dart';
 import 'package:outclass/injectable.dart';
 import 'package:outclass/views/auth/sign_in/widgets/progress_overlay.dart';
-import 'package:outclass/views/core/app_router.dart';
+import 'package:outclass/views/core/app_router.gr.dart';
 
+@RoutePage()
 class SignInPage extends StatefulWidget implements AutoRouteWrapper {
   const SignInPage({super.key});
 
