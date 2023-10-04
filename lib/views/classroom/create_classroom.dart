@@ -152,7 +152,7 @@ class CreateClassroomPageState extends State<CreateClassroomPage> {
                                   elevation: ButtonStyleButton.allOrNull(0),
                                 ),
                                 onPressed: _onCreateClassroomPressed,
-                                child: const Text('CreateClassroom kelas'),
+                                child: const Text('Buat kelas'),
                               ),
                             ),
                           ],

@@ -77,9 +77,9 @@ class AuthCubit extends HydratedCubit<AuthState> {
       return;
     }
 
-    final classroomMembers = responseClassroomMembers.data!;
+    final classroomMembers = responseClassroomMembers.data;
 
-    if (classroomMembers.isEmpty) {
+    if (classroomMembers == null || classroomMembers.isEmpty) {
       emit(state.copyWith(status: AuthStatus.submissionSuccessWithNoClassroom));
       return;
     }
